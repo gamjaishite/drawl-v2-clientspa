@@ -1,15 +1,15 @@
 import { Outlet, useRoutes } from "react-router-dom";
 
-import Home from "@/pages/Home";
 import Dashboard from "@/pages/Dashboard";
 
 import { ProtectedRoute } from "./protected";
 import { FourOhFour } from "@/pages/Error";
 import { AuthLayout, MainLayout } from "@/components/layout";
 import Login from "@/pages/Login";
+import Profile from "@/pages/Profile";
 
-const App = () => (
-  <MainLayout>
+const App = ({ title }: { title: string }) => (
+  <MainLayout title={title}>
     <Outlet />
   </MainLayout>
 );
@@ -18,11 +18,11 @@ const routes = [
   // unprotected
   {
     path: "/",
-    element: <App />,
+    element: <App title="Home" />,
     children: [
       {
         path: "/",
-        element: <Home />,
+        element: <Profile />,
       },
     ],
   },
@@ -45,7 +45,7 @@ const routes = [
   {
     path: "/",
     element: (
-      <MainLayout>
+      <MainLayout title="Admin">
         <ProtectedRoute roles={["ADMIN"]} />
       </MainLayout>
     ),

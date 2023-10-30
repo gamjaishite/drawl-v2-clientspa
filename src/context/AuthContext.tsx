@@ -23,7 +23,10 @@ interface AuthProviderProps {
 export const AuthContext = createContext<IUseAuth | undefined>(undefined);
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [user, setUser] = useState<UserInfo>();
+  const [user, setUser] = useState<UserInfo | undefined>({
+    name: "Mayuyu",
+    role: "BASIC",
+  });
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
