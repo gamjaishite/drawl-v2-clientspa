@@ -7,7 +7,9 @@ import { FourOhFour } from "@/pages/Error";
 import { AuthLayout, MainLayout } from "@/components/layout";
 import Login from "@/pages/Login";
 import Profile from "@/pages/Profile";
-import Verify from "@/pages/Dashboard/verifyuser";
+import VerifyUser from "@/pages/Dashboard/verifyuser";
+import VerifyCatalog from "@/pages/Dashboard/verifycatalog";
+import VerifyReport from "@/pages/Dashboard/report";
 
 const App = ({ title }: { title: string }) => (
   <MainLayout title={title}>
@@ -66,8 +68,32 @@ const routes = [
  
     children: [
       {
-        path: "/admin/dashboard/verify",
-        element: <Verify />,
+        path: "/admin/dashboard/verifyuser",
+        element: <VerifyUser />,
+      },
+    ],
+  },
+  {
+    path: "/",
+    element:  <App title="Admin Dashboard - Verify Catalog" />,
+        // {/* <ProtectedRoute roles={["ADMIN"]} /> */}
+ 
+    children: [
+      {
+        path: "/admin/dashboard/verifycatalog",
+        element: <VerifyCatalog />,
+      },
+    ],
+  },
+  {
+    path: "/",
+    element:  <App title="Admin Dashboard - Verify Report" />,
+        // {/* <ProtectedRoute roles={["ADMIN"]} /> */}
+ 
+    children: [
+      {
+        path: "/admin/dashboard/verifyreport",
+        element: <VerifyReport />,
       },
     ],
   },
@@ -75,6 +101,11 @@ const routes = [
     path: "*",
     element: <FourOhFour />,
   },
+  {
+    path: "*",
+    element: <FourOhFour />,
+  },
+  
 ];
 
 export const AppRoutes = () => {

@@ -1,13 +1,13 @@
-import { TableDemo } from "@/components/table/Table";
+import { TableUser } from "@/components/table/Table";
 
-const Verify = () => {
+const VerifyUser = () => {
     return (
       <>
         <main>Berikut adalah tabel untuk mem-verify user:</main>
-        <TableDemo />
+        <TableUser />
       </>
     );
     
   };
   
-  export default Verify;
+  export default VerifyUser;
