@@ -7,6 +7,7 @@ import { FourOhFour } from "@/pages/Error";
 import { AuthLayout, MainLayout } from "@/components/layout";
 import Login from "@/pages/Login";
 import Profile from "@/pages/Profile";
+import Verify from "@/pages/Dashboard/verifyuser";
 
 const App = ({ title }: { title: string }) => (
   <MainLayout title={title}>
@@ -44,15 +45,29 @@ const routes = [
   // protected for admin
   {
     path: "/",
-    element: (
-      <MainLayout title="Admin">
-        <ProtectedRoute roles={["ADMIN"]} />
-      </MainLayout>
-    ),
+    element:  <App title="Admin Dashboard" />,
+        // {/* <ProtectedRoute roles={["ADMIN"]} /> */}
+ 
     children: [
       {
         path: "/admin/dashboard",
         element: <Dashboard />,
+      },
+    ],
+  },
+  {
+    path: "*",
+    element: <FourOhFour />,
+  },
+  {
+    path: "/",
+    element:  <App title="Admin Dashboard - Verify Users" />,
+        // {/* <ProtectedRoute roles={["ADMIN"]} /> */}
+ 
+    children: [
+      {
+        path: "/admin/dashboard/verify",
+        element: <Verify />,
       },
     ],
   },

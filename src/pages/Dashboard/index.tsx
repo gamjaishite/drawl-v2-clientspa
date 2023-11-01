@@ -1,5 +1,9 @@
+
+
+
+
 const Dashboard = () => {
-  return <main>Hi, this is a dashboard page</main>;
+  return <main>Selamat datang di dashboard page, admin!</main>;
 };
 
 export default Dashboard;
