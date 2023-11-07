@@ -29,6 +29,16 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/profile/:username",
+    element: <App title="Profile" />,
+    children: [
+      {
+        path: "/profile/:username",
+        element: <Profile />,
+      },
+    ],
+  },
   // protected for unlogged in user
   {
     path: "/",
@@ -47,9 +57,9 @@ const routes = [
   // protected for admin
   {
     path: "/",
-    element:  <App title="Admin Dashboard" />,
-        // {/* <ProtectedRoute roles={["ADMIN"]} /> */}
- 
+    element: <App title="Admin Dashboard" />,
+    // {/* <ProtectedRoute roles={["ADMIN"]} /> */}
+
     children: [
       {
         path: "/admin/dashboard",
@@ -58,14 +68,10 @@ const routes = [
     ],
   },
   {
-    path: "*",
-    element: <FourOhFour />,
-  },
-  {
     path: "/",
-    element:  <App title="Admin Dashboard - Verify Users" />,
-        // {/* <ProtectedRoute roles={["ADMIN"]} /> */}
- 
+    element: <App title="Admin Dashboard - Verify Users" />,
+    // {/* <ProtectedRoute roles={["ADMIN"]} /> */}
+
     children: [
       {
         path: "/admin/dashboard/verifyuser",
@@ -75,9 +81,9 @@ const routes = [
   },
   {
     path: "/",
-    element:  <App title="Admin Dashboard - Verify Catalog" />,
-        // {/* <ProtectedRoute roles={["ADMIN"]} /> */}
- 
+    element: <App title="Admin Dashboard - Verify Catalog" />,
+    // {/* <ProtectedRoute roles={["ADMIN"]} /> */}
+
     children: [
       {
         path: "/admin/dashboard/verifycatalog",
@@ -87,9 +93,9 @@ const routes = [
   },
   {
     path: "/",
-    element:  <App title="Admin Dashboard - Verify Report" />,
-        // {/* <ProtectedRoute roles={["ADMIN"]} /> */}
- 
+    element: <App title="Admin Dashboard - Verify Report" />,
+    // {/* <ProtectedRoute roles={["ADMIN"]} /> */}
+
     children: [
       {
         path: "/admin/dashboard/verifyreport",
@@ -101,11 +107,6 @@ const routes = [
     path: "*",
     element: <FourOhFour />,
   },
-  {
-    path: "*",
-    element: <FourOhFour />,
-  },
-  
 ];
 
 export const AppRoutes = () => {
