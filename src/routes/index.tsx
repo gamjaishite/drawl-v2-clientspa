@@ -1,47 +1,47 @@
-import { Outlet, useRoutes } from "react-router-dom";
+import {Outlet, useRoutes} from 'react-router-dom'
 
-import Dashboard from "@/pages/Dashboard";
+import Dashboard from '@/pages/Dashboard'
 
-import { ProtectedRoute } from "./protected";
-import { FourOhFour } from "@/pages/Error";
-import { AuthLayout, MainLayout } from "@/components/layout";
-import Login from "@/pages/Login";
-import Profile from "@/pages/Profile";
-import VerifyUser from "@/pages/Dashboard/verifyuser";
-import VerifyCatalog from "@/pages/Dashboard/verifycatalog";
-import VerifyReport from "@/pages/Dashboard/report";
+import {ProtectedRoute} from './protected'
+import {FourOhFour} from '@/pages/Error'
+import {AuthLayout, MainLayout} from '@/components/layout'
+import Login from '@/pages/Login'
+import Profile from '@/pages/Profile'
+import VerifyUser from '@/pages/Dashboard/verifyuser'
+import VerifyCatalog from '@/pages/Dashboard/verifycatalog'
+import VerifyReport from '@/pages/Dashboard/report'
 
-const App = ({ title }: { title: string }) => (
+const App = ({title}: {title: string}) => (
   <MainLayout title={title}>
     <Outlet />
   </MainLayout>
-);
+)
 
 const routes = [
-  // unprotected
   {
-    path: "/",
-    element: <App title="Home" />,
+    path: '/',
+    element: <App title='Home' />,
     children: [
       {
-        path: "/",
-        element: <Profile />,
+        path: '/',
+        element: <Dashboard />,
       },
     ],
   },
+  // unprotected
   {
-    path: "/profile/:username",
+    path: "/user/:username",
     element: <App title="Profile" />,
     children: [
       {
-        path: "/profile/:username",
+        path: "/user/:username",
         element: <Profile />,
       },
     ],
   },
   // protected for unlogged in user
   {
-    path: "/",
+    path: '/',
     element: (
       <AuthLayout>
         <ProtectedRoute roles={[]} />
@@ -49,68 +49,73 @@ const routes = [
     ),
     children: [
       {
-        path: "/auth/login",
+        path: '/auth/login',
         element: <Login />,
       },
     ],
   },
   // protected for admin
   {
-    path: "/",
-    element: <App title="Admin Dashboard" />,
+    path: '/',
+    element: <App title='Admin Dashboard' />,
     // {/* <ProtectedRoute roles={["ADMIN"]} /> */}
 
     children: [
       {
-        path: "/admin/dashboard",
+        path: '/admin/dashboard',
         element: <Dashboard />,
       },
     ],
   },
   {
-    path: "/",
-    element: <App title="Admin Dashboard - Verify Users" />,
+    path: '*',
+    element: <FourOhFour />,
+  },
+  {
+    path: '/',
+    element: <App title='Admin Dashboard - Verify Users' />,
     // {/* <ProtectedRoute roles={["ADMIN"]} /> */}
 
     children: [
       {
-        path: "/admin/dashboard/verifyuser",
+        path: '/admin/dashboard/verifyuser',
         element: <VerifyUser />,
       },
     ],
   },
   {
-    path: "/",
-    element: <App title="Admin Dashboard - Verify Catalog" />,
+    path: '/',
+    element: <App title='Admin Dashboard - Verify Catalog' />,
     // {/* <ProtectedRoute roles={["ADMIN"]} /> */}
 
     children: [
       {
-        path: "/admin/dashboard/verifycatalog",
+        path: '/admin/dashboard/verifycatalog',
         element: <VerifyCatalog />,
       },
     ],
   },
   {
-    path: "/",
-    element: <App title="Admin Dashboard - Verify Report" />,
+    path: '/',
+    element: <App title='Admin Dashboard - Verify Report' />,
     // {/* <ProtectedRoute roles={["ADMIN"]} /> */}
 
     children: [
       {
-        path: "/admin/dashboard/verifyreport",
+        path: '/admin/dashboard/verifyreport',
         element: <VerifyReport />,
       },
     ],
   },
   {
-    path: "*",
+    path: '*',
     element: <FourOhFour />,
   },
-];
+
+]
 
 export const AppRoutes = () => {
-  const element = useRoutes(routes);
+  const element = useRoutes(routes)
 
-  return <>{element}</>;
-};
+  return <>{element}</>
+}

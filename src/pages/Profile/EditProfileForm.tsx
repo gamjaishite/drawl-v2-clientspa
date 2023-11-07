@@ -80,11 +80,11 @@ export const EditProfileForm = ({
 }) => {
   const [avatar, setAvatar] = useState<string | undefined | null>(
     profile.avatar
-      ? `${import.meta.env.VITE_PUBLIC_URL}/${profile.avatar}`
+      ? `${import.meta.env.VITE_REST_SERVICE_PUBLIC_URL}/${profile.avatar}`
       : null
   );
   const [cover, setCover] = useState<string | undefined | null>(
-    profile.cover ? `${import.meta.env.VITE_PUBLIC_URL}/${profile.cover}` : null
+    profile.cover ? `${import.meta.env.VITE_REST_SERVICE_PUBLIC_URL}/${profile.cover}` : null
   );
   const avatarInput = useRef<HTMLInputElement>(null);
   const coverInput = useRef<HTMLInputElement>(null);
@@ -113,7 +113,7 @@ export const EditProfileForm = ({
     formData.append("bio", values.bio ?? "");
     console.log(formData.get("avatar"));
     const result = await fetch(
-      `${import.meta.env.VITE_API_URL}/profile/${profile.id}`,
+      `${import.meta.env.VITE_REST_SERVICE_BASE_URL}/profile/${profile.id}`,
       {
         method: "PUT",
         body: formData,

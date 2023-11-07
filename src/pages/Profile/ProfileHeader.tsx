@@ -31,7 +31,7 @@ export const ProfileHeader = ({
       <img
         src={
           profile.cover
-            ? `${import.meta.env.VITE_PUBLIC_URL}/${profile.cover}`
+            ? `${import.meta.env.VITE_REST_SERVICE_PUBLIC_URL}/${profile.cover}`
             : "/header.jpg"
         }
         alt="User tes header"
@@ -42,7 +42,7 @@ export const ProfileHeader = ({
           <AvatarImage
             src={
               profile.avatar
-                ? `${import.meta.env.VITE_PUBLIC_URL}/${profile.avatar}`
+                ? `${import.meta.env.VITE_REST_SERVICE_PUBLIC_URL}/${profile.avatar}`
                 : "/avatar.jpeg"
             }
             className="w-full h-full object-cover"

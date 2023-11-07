@@ -13,7 +13,7 @@ const Profile = () => {
   console.log(username);
   async function getProfile(username: string) {
     const result = await fetch(
-      `${import.meta.env.VITE_API_URL}/profile/${username}`
+      `${import.meta.env.VITE_REST_SERVICE_BASE_URL}/profile/${username}`
     );
 
     if (result.ok) {

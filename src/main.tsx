@@ -6,13 +6,16 @@ import { AppRoutes } from "./routes";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./context";
 import { ToastContainer } from "react-toastify";
+import {CookiesProvider} from 'react-cookie'
 import "react-toastify/dist/ReactToastify.css";
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <BrowserRouter>
-        <AuthProvider>
+
+    <CookiesProvider>
+      <ThemeProvider defaultTheme='light' storageKey='vite-ui-theme'>
+        <BrowserRouter>
+          <AuthProvider>
           <ToastContainer
             position="top-center"
             autoClose={2000}
@@ -25,9 +28,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             pauseOnHover
             theme="colored"
           />
-          <AppRoutes />
-        </AuthProvider>
-      </BrowserRouter>
-    </ThemeProvider>
-  </React.StrictMode>
-);
+            <AppRoutes />
+          </AuthProvider>
+        </BrowserRouter>
+      </ThemeProvider>
+    </CookiesProvider>
+  </React.StrictMode>,
+)

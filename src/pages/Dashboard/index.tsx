@@ -1,9 +1,17 @@
-
-
-
+import {PostCard} from '@/components/card/PostCard'
+import {useAuth} from '@/hooks'
 
 const Dashboard = () => {
-  return <main>Selamat datang di dashboard page, admin!</main>;
-};
+  const auth = useAuth()
+  return (
+    <>
+      <div className='flex flex-col gap-6'>
+        <p>{auth.user ? auth.user.username : 'no user'}</p>
+        <PostCard />
+        <PostCard />
+      </div>
+    </>
+  )
+}
 
-export default Dashboard;
+export default Dashboard
