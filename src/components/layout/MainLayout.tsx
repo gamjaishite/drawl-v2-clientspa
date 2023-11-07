@@ -25,7 +25,7 @@ const MainLayout = ({ title, children }: MainLayoutProps) => {
       </aside>
       <div className="w-full px-0 md:px-24">
         <header className="sticky top-0 z-40 py-4 px-5 md:px-10 flex flex-row items-center gap-4 bg-background/30 backdrop-blur-lg">
-          <ArrowLeft />
+          {!title.includes("home") && <ArrowLeft />}
           <h4>{title}</h4>
         </header>
         <main className="py-4 px-5 md:px-10">{children}</main>

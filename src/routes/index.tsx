@@ -1,34 +1,44 @@
-import { Outlet, useRoutes } from "react-router-dom";
+import {Outlet, useRoutes} from 'react-router-dom'
 
-import Dashboard from "@/pages/Dashboard";
+import Dashboard from '@/pages/Dashboard'
 
-import { ProtectedRoute } from "./protected";
-import { FourOhFour } from "@/pages/Error";
-import { AuthLayout, MainLayout } from "@/components/layout";
-import Login from "@/pages/Login";
-import Profile from "@/pages/Profile";
+import {ProtectedRoute} from './protected'
+import {FourOhFour} from '@/pages/Error'
+import {AuthLayout, MainLayout} from '@/components/layout'
+import Login from '@/pages/Login'
+import Profile from '@/pages/Profile'
 
-const App = ({ title }: { title: string }) => (
+const App = ({title}: {title: string}) => (
   <MainLayout title={title}>
     <Outlet />
   </MainLayout>
-);
+)
 
 const routes = [
   // unprotected
   {
-    path: "/",
-    element: <App title="Home" />,
+    path: '/',
+    element: <App title='home' />,
     children: [
       {
-        path: "/",
+        path: '/',
+        element: <Dashboard />,
+      },
+    ],
+  },
+  {
+    path: '/profile',
+    element: <App title='Profile' />,
+    children: [
+      {
+        path: '/profile',
         element: <Profile />,
       },
     ],
   },
   // protected for unlogged in user
   {
-    path: "/",
+    path: '/',
     element: (
       <AuthLayout>
         <ProtectedRoute roles={[]} />
@@ -36,34 +46,34 @@ const routes = [
     ),
     children: [
       {
-        path: "/auth/login",
+        path: '/auth/login',
         element: <Login />,
       },
     ],
   },
   // protected for admin
   {
-    path: "/",
+    path: '/',
     element: (
-      <MainLayout title="Admin">
-        <ProtectedRoute roles={["ADMIN"]} />
+      <MainLayout title='Admin'>
+        <ProtectedRoute roles={['ADMIN']} />
       </MainLayout>
     ),
     children: [
       {
-        path: "/admin/dashboard",
+        path: '/admin/dashboard',
         element: <Dashboard />,
       },
     ],
   },
   {
-    path: "*",
+    path: '*',
     element: <FourOhFour />,
   },
-];
+]
 
 export const AppRoutes = () => {
-  const element = useRoutes(routes);
+  const element = useRoutes(routes)
 
-  return <>{element}</>;
-};
+  return <>{element}</>
+}
