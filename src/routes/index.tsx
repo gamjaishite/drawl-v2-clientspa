@@ -7,6 +7,9 @@ import {FourOhFour} from '@/pages/Error'
 import {AuthLayout, MainLayout} from '@/components/layout'
 import Login from '@/pages/Login'
 import Profile from '@/pages/Profile'
+import VerifyUser from '@/pages/Dashboard/verifyuser'
+import VerifyCatalog from '@/pages/Dashboard/verifycatalog'
+import VerifyReport from '@/pages/Dashboard/report'
 
 const App = ({title}: {title: string}) => (
   <MainLayout title={title}>
@@ -18,20 +21,10 @@ const routes = [
   // unprotected
   {
     path: '/',
-    element: <App title='home' />,
+    element: <App title='Home' />,
     children: [
       {
         path: '/',
-        element: <Dashboard />,
-      },
-    ],
-  },
-  {
-    path: '/profile',
-    element: <App title='Profile' />,
-    children: [
-      {
-        path: '/profile',
         element: <Profile />,
       },
     ],
@@ -54,11 +47,9 @@ const routes = [
   // protected for admin
   {
     path: '/',
-    element: (
-      <MainLayout title='Admin'>
-        <ProtectedRoute roles={['ADMIN']} />
-      </MainLayout>
-    ),
+    element: <App title='Admin Dashboard' />,
+    // {/* <ProtectedRoute roles={["ADMIN"]} /> */}
+
     children: [
       {
         path: '/admin/dashboard',
@@ -70,6 +61,51 @@ const routes = [
     path: '*',
     element: <FourOhFour />,
   },
+  {
+    path: '/',
+    element: <App title='Admin Dashboard - Verify Users' />,
+    // {/* <ProtectedRoute roles={["ADMIN"]} /> */}
+
+    children: [
+      {
+        path: '/admin/dashboard/verifyuser',
+        element: <VerifyUser />,
+      },
+    ],
+  },
+  {
+    path: '/',
+    element: <App title='Admin Dashboard - Verify Catalog' />,
+    // {/* <ProtectedRoute roles={["ADMIN"]} /> */}
+
+    children: [
+      {
+        path: '/admin/dashboard/verifycatalog',
+        element: <VerifyCatalog />,
+      },
+    ],
+  },
+  {
+    path: '/',
+    element: <App title='Admin Dashboard - Verify Report' />,
+    // {/* <ProtectedRoute roles={["ADMIN"]} /> */}
+
+    children: [
+      {
+        path: '/admin/dashboard/verifyreport',
+        element: <VerifyReport />,
+      },
+    ],
+  },
+  {
+    path: '*',
+    element: <FourOhFour />,
+  },
+  {
+    path: '*',
+    element: <FourOhFour />,
+  },
+
 ]
 
 export const AppRoutes = () => {
