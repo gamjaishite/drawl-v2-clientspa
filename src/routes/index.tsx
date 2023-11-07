@@ -30,11 +30,11 @@ const routes = [
   },
   // unprotected
   {
-    path: '/',
-    element: <App title='Home' />,
+    path: "/profile/:username",
+    element: <App title="Profile" />,
     children: [
       {
-        path: '/profile',
+        path: "/profile/:username",
         element: <Profile />,
       },
     ],
@@ -106,10 +106,6 @@ const routes = [
         element: <VerifyReport />,
       },
     ],
-  },
-  {
-    path: '*',
-    element: <FourOhFour />,
   },
   {
     path: '*',
