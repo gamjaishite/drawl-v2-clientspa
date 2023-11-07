@@ -42,7 +42,7 @@ const BasicSidebar = () => {
           <span className="hidden md:block">Home</span>
         </Button>
       </a>
-      <a href={`/user/${auth.user?.username}`} className="text-foreground">
+      <a href={`/profile/${auth.user?.username}`} className="text-foreground">
         <Button
           variant={"ghost"}
           size={"lg"}
@@ -122,9 +122,13 @@ const MainLayout = ({ title = "", children }: MainLayoutProps) => {
         <CurrentSidebar />
       </aside>
       <div className="w-full px-0 md:px-24">
-        <header className="sticky top-0 z-40 py-4 px-5 md:px-10 flex flex-row items-center gap-4 bg-background/30 backdrop-blur-lg">
+        <header className="sticky top-0 z-40 py-4 px-5 md:px-10 flex flex-row justify-between items-center gap-4 bg-background/30 backdrop-blur-lg">
         <div className="flex flex-row items-center gap-4">
-          {!title.includes("home") && <ArrowLeft />}
+          {!title.toLowerCase().includes("home") && 
+          <a href="/">
+            <ArrowLeft />
+          </a>
+          }
           <h4>{title}</h4>
           </div>
           <DarkModeToggle />

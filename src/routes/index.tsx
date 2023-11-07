@@ -30,11 +30,11 @@ const routes = [
   },
   // unprotected
   {
-    path: "/user/:username",
+    path: "/profile/:username",
     element: <App title="Profile" />,
     children: [
       {
-        path: "/user/:username",
+        path: "/profile/:username",
         element: <Profile />,
       },
     ],
