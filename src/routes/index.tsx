@@ -18,13 +18,23 @@ const App = ({title}: {title: string}) => (
 )
 
 const routes = [
-  // unprotected
   {
     path: '/',
     element: <App title='Home' />,
     children: [
       {
         path: '/',
+        element: <Dashboard />,
+      },
+    ],
+  },
+  // unprotected
+  {
+    path: '/',
+    element: <App title='Home' />,
+    children: [
+      {
+        path: '/profile',
         element: <Profile />,
       },
     ],
