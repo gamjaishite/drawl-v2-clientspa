@@ -10,10 +10,10 @@ export const PostCard = () => {
         <AvatarFallback>CN</AvatarFallback>
       </Avatar>
       <div className="flex flex-col gap-3">
-        <div className="flex flex-row gap-2 items-center">
-          <p className="large">Mayuyu</p>
-          <Verified />
-        </div>
+        <a href="/" className="flex items-center">
+          <span>Mayuyu</span>
+          <Verified size={22} fill="#6366f1" className="text-white" />
+        </a>
         <div className="border rounded-lg flex flex-row">
           <img
             src="/header.jpg"
