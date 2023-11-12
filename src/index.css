@@ -128,3 +128,13 @@
     @apply text-slate-500 text-sm font-normal leading-[1.25rem]
   }
 }
+
+.Toastify__toast-container {
+  margin-top: 2.5rem !important;
+}
+
+.Toastify__toast {
+  width: 20rem !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}

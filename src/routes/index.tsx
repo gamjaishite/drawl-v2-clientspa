@@ -21,7 +21,7 @@ const App = ({title}: {title: string}) => (
 const routes = [
   {
     path: '/',
-    element: <App title='Home' />,
+    element: <App title="Home" />,
     children: [
       {
         path: '/',
@@ -32,7 +32,7 @@ const routes = [
   // unprotected
   {
     path: '/profile/:username',
-    element: <App title='Profile' />,
+    element: <App title="Profile" />,
     children: [
       {
         path: '/profile/:username',
@@ -42,7 +42,7 @@ const routes = [
   },
   {
     path: '/post/:id',
-    element: <App title='Post Detail' />,
+    element: <App title="Post Detail" />,
     children: [
       {
         path: '/post/:id',
@@ -68,7 +68,7 @@ const routes = [
   // protected for admin
   {
     path: '/',
-    element: <App title='Admin Dashboard' />,
+    element: <App title="Admin Dashboard" />,
     // {/* <ProtectedRoute roles={["ADMIN"]} /> */}
 
     children: [
@@ -84,7 +84,7 @@ const routes = [
   },
   {
     path: '/',
-    element: <App title='Admin Dashboard - Verify Users' />,
+    element: <App title="Admin Dashboard - Verify Users" />,
     // {/* <ProtectedRoute roles={["ADMIN"]} /> */}
 
     children: [
@@ -96,7 +96,7 @@ const routes = [
   },
   {
     path: '/',
-    element: <App title='Admin Dashboard - Verify Catalog' />,
+    element: <App title="Admin Dashboard - Verify Catalog" />,
     // {/* <ProtectedRoute roles={["ADMIN"]} /> */}
 
     children: [
@@ -108,7 +108,7 @@ const routes = [
   },
   {
     path: '/',
-    element: <App title='Admin Dashboard - Verify Report' />,
+    element: <App title="Admin Dashboard - Verify Report" />,
     // {/* <ProtectedRoute roles={["ADMIN"]} /> */}
 
     children: [
@@ -120,9 +120,14 @@ const routes = [
   },
   {
     path: '*',
-    element: <FourOhFour />,
+    element: <App title="Not Found" />,
+    children: [
+      {
+        path: '*',
+        element: <FourOhFour />,
+      },
+    ],
   },
-
 ]
 
 export const AppRoutes = () => {

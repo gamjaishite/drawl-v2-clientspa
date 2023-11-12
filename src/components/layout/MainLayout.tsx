@@ -1,41 +1,42 @@
-import { useAuth } from "@/hooks";
-import { ArrowLeft, Home, Moon, Settings, Sun, User } from "lucide-react";
-import { Button } from "../ui/button";
-import { Switch } from "../ui/switch";
-import { useTheme } from "@/components/theme-provider";
+import {useAuth} from '@/hooks'
+import {ArrowLeft, Home, Moon, Sun, User} from 'lucide-react'
+import {Button} from '../ui/button'
+import {Switch} from '../ui/switch'
+import {useTheme} from '@/components/theme-provider'
+import {toast} from 'react-toastify'
 
 type MainLayoutProps = {
-  title?: string;
-  children: React.ReactNode;
-};
+  title?: string
+  children: React.ReactNode
+}
 
 const DarkModeToggle = () => {
-  const { setTheme, theme } = useTheme();
+  const {setTheme, theme} = useTheme()
 
   return (
     <div className="flex items-center space-x-2 px-4">
       <Sun />
       <Switch
         id="airplane-mode"
-        checked={theme === "dark"}
+        checked={theme === 'dark'}
         onCheckedChange={(checked) => {
-          setTheme(checked ? "dark" : "light");
+          setTheme(checked ? 'dark' : 'light')
         }}
       />
       <Moon />
     </div>
-  );
-};
+  )
+}
 
 const BasicSidebar = () => {
-  const auth = useAuth();
+  const auth = useAuth()
 
   return (
-    <div className="flex md:flex-col justify-between md:justify-normal gap-2">
+    <div className="flex md:flex-col justify-around md:justify-normal gap-2">
       <a href="/" className="text-foreground">
         <Button
-          variant={"ghost"}
-          size={"lg"}
+          variant={'ghost'}
+          size={'lg'}
           className="justify-start space-x-2 px-4 text-xl w-full"
         >
           <Home />
@@ -44,76 +45,76 @@ const BasicSidebar = () => {
       </a>
       <a href={`/profile/${auth.user?.username}`} className="text-foreground">
         <Button
-          variant={"ghost"}
-          size={"lg"}
+          variant={'ghost'}
+          size={'lg'}
           className="justify-start space-x-2 px-4 text-xl w-full"
         >
           <User />
           <span className="hidden md:block">Profile</span>
         </Button>
       </a>
-      <a href={`/settings`} className="text-foreground">
-        <Button
-          variant={"ghost"}
-          size={"lg"}
-          className="justify-start space-x-2 px-4 text-xl w-full"
-        >
-          <Settings />
-          <span className="hidden md:block">Settings</span>
-        </Button>
-      </a>
     </div>
-  );
-};
+  )
+}
 
 const AdminSidebar = () => {
   return (
     <div className="flex flex-col gap-2">
       <Button
-        variant={"ghost"}
-        size={"lg"}
+        variant={'ghost'}
+        size={'lg'}
         className="justify-start space-x-2 px-4 text-xl w-full"
       >
         Dashboard
       </Button>
       <Button
-        variant={"ghost"}
-        size={"lg"}
+        variant={'ghost'}
+        size={'lg'}
         className="justify-start space-x-2 px-4 text-xl w-full"
       >
         Profile
       </Button>
       <Button
-        variant={"ghost"}
-        size={"lg"}
+        variant={'ghost'}
+        size={'lg'}
         className="justify-start space-x-2 px-4 text-xl w-full"
       >
         Settings
       </Button>
       <Button
-        variant={"ghost"}
-        size={"lg"}
+        variant={'ghost'}
+        size={'lg'}
         className="justify-start space-x-2 px-4 text-xl w-full"
       >
         Users
       </Button>
     </div>
-  );
-};
+  )
+}
 
 const GuestSidebar = () => {
-  return <div className="flex flex-col gap-4"></div>;
-};
+  return <div className="flex flex-col gap-4"></div>
+}
 
 const Sidebar: Record<string, () => JSX.Element> = {
   BASIC: BasicSidebar,
   ADMIN: AdminSidebar,
   GUEST: GuestSidebar,
-};
+}
 
-const MainLayout = ({ title = "", children }: MainLayoutProps) => {
-  const auth = useAuth();
-  const CurrentSidebar = Sidebar[auth.user ? auth.user.role : "GUEST"];
+const MainLayout = ({title = '', children}: MainLayoutProps) => {
+  const auth = useAuth()
+  const CurrentSidebar = Sidebar[auth.user ? auth.user.role : 'GUEST']
+
+  const handleLogout = () => {
+    const result = auth.logout()
+    console.log(result)
+    if (!result.success) {
+      toast.error(result.message)
+    } else {
+      toast.success(result.message)
+    }
+  }
 
   return (
     <div className="relative flex flex-col-reverse md:flex-row">
@@ -123,20 +124,29 @@ const MainLayout = ({ title = "", children }: MainLayoutProps) => {
       </aside>
       <div className="w-full px-0 md:px-24">
         <header className="sticky top-0 z-40 py-4 px-5 md:px-10 flex flex-row justify-between items-center gap-4 bg-background/30 backdrop-blur-lg">
-        <div className="flex flex-row items-center gap-4">
-          {!title.toLowerCase().includes("home") && 
-          <a href="/">
-            <ArrowLeft />
-          </a>
-          }
-          <h4>{title}</h4>
+          <div className="flex flex-row items-center gap-4">
+            {!title.toLowerCase().includes('home') && (
+              <a href="/">
+                <ArrowLeft />
+              </a>
+            )}
+            <h4>{title}</h4>
           </div>
-          <DarkModeToggle />
+          <div className="flex flex-row gap-2 items-center">
+            <DarkModeToggle />
+            {!auth.user ? (
+              <a href="/auth/login">
+                <Button>Log In</Button>
+              </a>
+            ) : (
+              <Button onClick={handleLogout}>Log Out</Button>
+            )}
+          </div>
         </header>
-        <main className="py-4 px-5 md:px-10">{children}</main>
+        <main className="py-4 px-5 md:px-10 overflow-hidden">{children}</main>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default MainLayout;
+export default MainLayout
