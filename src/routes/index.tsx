@@ -10,6 +10,7 @@ import Profile from '@/pages/Profile'
 import VerifyUser from '@/pages/Dashboard/verifyuser'
 import VerifyCatalog from '@/pages/Dashboard/verifycatalog'
 import VerifyReport from '@/pages/Dashboard/report'
+import Post from '@/pages/Post'
 
 const App = ({title}: {title: string}) => (
   <MainLayout title={title}>
@@ -30,12 +31,22 @@ const routes = [
   },
   // unprotected
   {
-    path: '/',
-    element: <App title='Home' />,
+    path: '/profile/:username',
+    element: <App title='Profile' />,
     children: [
       {
-        path: '/profile',
+        path: '/profile/:username',
         element: <Profile />,
+      },
+    ],
+  },
+  {
+    path: '/post/:id',
+    element: <App title='Post Detail' />,
+    children: [
+      {
+        path: '/post/:id',
+        element: <Post />,
       },
     ],
   },
@@ -106,10 +117,6 @@ const routes = [
         element: <VerifyReport />,
       },
     ],
-  },
-  {
-    path: '*',
-    element: <FourOhFour />,
   },
   {
     path: '*',

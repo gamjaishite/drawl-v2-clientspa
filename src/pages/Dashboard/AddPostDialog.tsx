@@ -18,9 +18,12 @@ import {useEffect, useState} from 'react'
 import ConfirmDialog from '@/pages/Dashboard/ConfirmDialog.tsx'
 import SearchCatalogDialog from '@/pages/Dashboard/SearchCatalogDialog.tsx'
 import {useCookies} from 'react-cookie'
+import {toast} from 'react-toastify'
 
 
-const AddPostDialog = () => {
+const AddPostDialog = (props: {
+  setIsRefetch: (x: boolean) => void;
+}) => {
   const auth = useAuth()
   const [openConfirm, setOpenConfirm] = useState(false)
   const [open, setOpen] = useState(false)
@@ -78,10 +81,18 @@ const AddPostDialog = () => {
       if (!res.ok) {
         // do something
         console.log(resData.message)
+        toast(resData.message, {
+          type: 'error',
+        })
       }
 
+      toast('Post created successfully! 🌸')
       setOpen(false)
+      props.setIsRefetch(true)
     } catch (e) {
+      toast('Something went wrong, please try again later', {
+        type: 'error',
+      })
       console.log(e)
     }
   }
@@ -107,7 +118,7 @@ const AddPostDialog = () => {
         }
       }}>
         <DialogTrigger asChild>
-          <Button variant='default' className='rounded-full w-12 h-12' onClick={() => setOpen(true)}><Pencil /></Button>
+          <Button variant='outline' className='rounded-full w-12 h-12' onClick={() => setOpen(true)}><Pencil /></Button>
         </DialogTrigger>
         <DialogContent className='sm:max-w-md' onPointerDownOutside={checkContent}>
           <DialogHeader>

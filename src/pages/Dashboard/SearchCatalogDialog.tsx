@@ -46,8 +46,8 @@ const SearchCatalogDialog = (props: {
         },
         credentials: 'include',
       })
-      const data = await res.json()
-      return {...data.data, prevOffset: pageParam}
+      const resData = await res.json()
+      return {...resData.data, prevOffset: pageParam}
     } catch (e) {
       console.log(e)
       return {items: [], page: 0, totalPage: 0, prevOffset: pageParam}
