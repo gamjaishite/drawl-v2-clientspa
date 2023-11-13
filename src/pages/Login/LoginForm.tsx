@@ -14,33 +14,37 @@ import {
 } from '@/components/ui/form'
 import {Input} from '@/components/ui/input'
 import {useAuth} from '@/hooks'
-import {useNavigate} from 'react-router-dom'
-import {useState} from 'react'
-import {Alert, AlertDescription} from '@/components/ui/alert.tsx'
+import {toast} from 'react-toastify'
 
 const formSchema = z.object({
-  email: z.string({
-    required_error: 'Email is required',
-    invalid_type_error: 'Email is not in a valid type',
-  }).trim().min(1, {
-    message: 'Email is required',
-  }).email({
-    message: 'Invalid email',
-  }),
-  password: z.string({
-    required_error: 'Password is required',
-    invalid_type_error: 'Password is not in a valid type',
-  }).trim().min(1, {
-    message: 'Password is required',
-  }).max(255, {
-    message: 'Password is too long, maximum 255 characters',
-  }),
+  email: z
+    .string({
+      required_error: 'Email is required',
+      invalid_type_error: 'Email is not in a valid type',
+    })
+    .trim()
+    .min(1, {
+      message: 'Email is required',
+    })
+    .email({
+      message: 'Invalid email',
+    }),
+  password: z
+    .string({
+      required_error: 'Password is required',
+      invalid_type_error: 'Password is not in a valid type',
+    })
+    .trim()
+    .min(1, {
+      message: 'Password is required',
+    })
+    .max(255, {
+      message: 'Password is too long, maximum 255 characters',
+    }),
 })
 
 const LoginForm = () => {
   const auth = useAuth()
-  const navigate = useNavigate()
-  const [error, setError] = useState<string | undefined>()
 
   // form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -54,40 +58,30 @@ const LoginForm = () => {
   // submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const result = await auth.login(values)
+    console.log(result)
     if (!result.success) {
-      setError(result.message)
+      toast.error(result.message)
     } else {
-      navigate('/')
+      window.location.href = '/'
     }
   }
 
   return (
     <>
-      <div className='flex flex-col gap-10'>
+      <div className="flex flex-col gap-10">
         <h2>
-          Login to <a href='/'>DQ</a>
+          Login to <a href="/">DQ</a>
         </h2>
-        {error && (
-          <Alert className='border border-red-500 bg-red-50'>
-            <AlertDescription>
-              {error}
-            </AlertDescription>
-          </Alert>
-        )}
-
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className='flex flex-col gap-4'
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
             <FormField
               control={form.control}
-              name='email'
+              name="email"
               render={({field}) => (
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input type='email' placeholder='Enter email' {...field} />
+                    <Input type="email" placeholder="Enter email" {...field} />
                   </FormControl>
                   <FormDescription></FormDescription>
                   <FormMessage />
@@ -96,12 +90,12 @@ const LoginForm = () => {
             />
             <FormField
               control={form.control}
-              name='password'
+              name="password"
               render={({field}) => (
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input type='password' placeholder='Enter password' {...field} />
+                    <Input type="password" placeholder="Enter password" {...field} />
                   </FormControl>
                   <FormDescription></FormDescription>
                   <FormMessage />
@@ -109,10 +103,16 @@ const LoginForm = () => {
               )}
             />
             <span>
-              Doesn't have account? <a
-              href={`${import.meta.env.VITE_PHP_SERVICE_BASE_URL}/signup?redirect_to=${import.meta.env.VITE_SPA_CLIENT_BASE_URL}/auth/login`}>Create One</a>
+              Doesn't have account?{' '}
+              <a
+                href={`${import.meta.env.VITE_PHP_SERVICE_BASE_URL}/signup?redirect_to=${
+                  import.meta.env.VITE_SPA_CLIENT_BASE_URL
+                }/auth/login`}
+              >
+                Create One
+              </a>
             </span>
-            <Button type='submit'>Login</Button>
+            <Button type="submit">Login</Button>
           </form>
         </Form>
       </div>

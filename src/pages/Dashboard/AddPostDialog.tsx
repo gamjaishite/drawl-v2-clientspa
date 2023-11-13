@@ -8,7 +8,13 @@ import {
 import {Button} from '@/components/ui/button.tsx'
 
 import {Pencil, X} from 'lucide-react'
-import {Form, FormControl, FormField, FormItem, FormMessage} from '@/components/ui/form.tsx'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from '@/components/ui/form.tsx'
 import {z} from 'zod'
 import {useAuth} from '@/hooks'
 import {useForm} from 'react-hook-form'
@@ -20,28 +26,32 @@ import SearchCatalogDialog from '@/pages/Dashboard/SearchCatalogDialog.tsx'
 import {useCookies} from 'react-cookie'
 import {toast} from 'react-toastify'
 
-
-const AddPostDialog = (props: {
-  setIsRefetch: (x: boolean) => void;
-}) => {
+const AddPostDialog = (props: {setIsRefetch: (x: boolean) => void}) => {
   const auth = useAuth()
   const [openConfirm, setOpenConfirm] = useState(false)
   const [open, setOpen] = useState(false)
-  const [selected, setSelected] = useState<{uuid: string; title: string; poster: string}>()
+  const [selected, setSelected] = useState<{
+    uuid: string
+    title: string
+    poster: string
+  }>()
   const [catalogError, setCatalogError] = useState<string>()
   const [cookies] = useCookies()
 
   const addPostSchema = z.object({
-    content: z.string({
-      required_error: 'Content is required',
-      invalid_type_error: 'Content is not in a valid type',
-    }).trim().min(1, {
-      message: 'Content is required',
-    }).max(auth.user?.verified ? 2000 : 500, {
-      message: 'Content maximum 500 characters',
-    }),
+    content: z
+      .string({
+        required_error: 'Content is required',
+        invalid_type_error: 'Content is not in a valid type',
+      })
+      .trim()
+      .min(1, {
+        message: 'Content is required',
+      })
+      .max(auth.user?.verified ? 2000 : 500, {
+        message: 'Content maximum 500 characters',
+      }),
   })
-
 
   const form = useForm<z.infer<typeof addPostSchema>>({
     resolver: zodResolver(addPostSchema),
@@ -64,18 +74,21 @@ const AddPostDialog = (props: {
     }
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_REST_SERVICE_BASE_URL}/discuss-post`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${cookies.suka_nyabun}`,
-          'Content-Type': 'application/json',
+      const res = await fetch(
+        `${import.meta.env.VITE_REST_SERVICE_BASE_URL}/discuss-post`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${cookies.suka_nyabun}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            catalogId: selected.uuid,
+            content: values.content,
+          }),
+          credentials: 'include',
         },
-        body: JSON.stringify({
-          catalogId: selected.uuid,
-          content: values.content,
-        }),
-        credentials: 'include',
-      })
+      )
       const resData = await res.json()
 
       if (!res.ok) {
@@ -97,9 +110,8 @@ const AddPostDialog = (props: {
     }
   }
 
-
   const checkContent = () => {
-    (selected || form.getValues('content') !== '') ? setOpenConfirm(true) : setOpen(false)
+    selected || form.getValues('content') !== '' ? setOpenConfirm(true) : setOpen(false)
   }
 
   useEffect(() => {
@@ -110,58 +122,94 @@ const AddPostDialog = (props: {
 
   return (
     <>
-      <ConfirmDialog open={openConfirm} setOpen={setOpenConfirm} setCreateOpen={setOpen} />
-      <Dialog open={open} onOpenChange={() => {
-        if (!open) {
-          form.reset()
-          setSelected(undefined)
-        }
-      }}>
+      <ConfirmDialog
+        open={openConfirm}
+        setOpen={setOpenConfirm}
+        setCreateOpen={setOpen}
+      />
+      <Dialog
+        open={open}
+        onOpenChange={() => {
+          if (!open) {
+            form.reset()
+            setSelected(undefined)
+          }
+        }}
+      >
         <DialogTrigger asChild>
-          <Button variant='outline' className='rounded-full w-12 h-12' onClick={() => setOpen(true)}><Pencil /></Button>
+          <Button
+            variant="outline"
+            className="rounded-full w-16 h-16"
+            onClick={() => setOpen(true)}
+          >
+            <Pencil />
+          </Button>
         </DialogTrigger>
-        <DialogContent className='sm:max-w-md' onPointerDownOutside={checkContent}>
+        <DialogContent className="sm:max-w-md" onPointerDownOutside={checkContent}>
           <DialogHeader>
             <DialogTitle>New Post</DialogTitle>
           </DialogHeader>
-          <div className='flex flex-col gap-4'>
+          <div className="flex flex-col gap-4">
             {/*<SearchCatalogCombobox setCatalogIId={setCatalogId} />*/}
             {selected ? (
               <div>
-                <div className='flex gap-4 items-center border rounded-md'>
-                  <img src={`${import.meta.env.VITE_PHP_SERVICE_POSTER_BASE_URL}/${selected.poster}`}
-                       className='h-[80px] w-[60px] rounded-l-md bg-cover' />
-                  <span className='flex-1'>{selected.title}</span>
-                  <X className='cursor-pointer m-2' onClick={() => setSelected(undefined)} />
+                <div className="flex gap-4 items-center border rounded-md">
+                  <img
+                    src={`${import.meta.env.VITE_PHP_SERVICE_POSTER_BASE_URL}/${
+                      selected.poster
+                    }`}
+                    className="h-[80px] w-[60px] rounded-l-md bg-cover"
+                  />
+                  <span className="flex-1">{selected.title}</span>
+                  <X
+                    className="cursor-pointer m-2"
+                    onClick={() => setSelected(undefined)}
+                  />
                 </div>
               </div>
             ) : (
               <div>
                 <SearchCatalogDialog setSelected={setSelected} />
                 {catalogError && (
-                  <span className='text-sm font-medium text-destructive'>{catalogError}</span>
+                  <span className="text-sm font-medium text-destructive">
+                    {catalogError}
+                  </span>
                 )}
               </div>
             )}
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
-                <FormField name='content' render={({field}) => (
-                  <FormItem className='flex flex-col gap-1'>
-                    <FormControl>
-                      <Textarea placeholder='This drama is good as f***'
-                                className='min-h-[300px] border-none resize-none'
-                                {...field} />
-                    </FormControl>
-                    <div className='flex justify-end'>
-                      <FormMessage className='flex-1' />
-                      <span
-                        className={`${countChars > (auth.user?.verified ? 2000 : 500) ? 'text-destructive' : 'text-zinc-400'} text-sm font-medium`}>{countChars}/{auth.user?.verified ? 2000 : 500} chars.</span>
-                    </div>
-                  </FormItem>
-                )} />
-                <div className='flex gap-4 items-center justify-end max-'>
-                  <Button type='button' onClick={checkContent} variant='ghost'>Close</Button>
-                  <Button type='submit'>Submit</Button>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                <FormField
+                  name="content"
+                  render={({field}) => (
+                    <FormItem className="flex flex-col gap-1">
+                      <FormControl>
+                        <Textarea
+                          placeholder="This drama is good as f***"
+                          className="min-h-[300px] border-none resize-none"
+                          {...field}
+                        />
+                      </FormControl>
+                      <div className="flex justify-end">
+                        <FormMessage className="flex-1" />
+                        <span
+                          className={`${
+                            countChars > (auth.user?.verified ? 2000 : 500)
+                              ? 'text-destructive'
+                              : 'text-zinc-400'
+                          } text-sm font-medium`}
+                        >
+                          {countChars}/{auth.user?.verified ? 2000 : 500} chars.
+                        </span>
+                      </div>
+                    </FormItem>
+                  )}
+                />
+                <div className="flex gap-4 items-center justify-end max-">
+                  <Button type="button" onClick={checkContent} variant="ghost">
+                    Close
+                  </Button>
+                  <Button type="submit">Submit</Button>
                 </div>
               </form>
             </Form>
