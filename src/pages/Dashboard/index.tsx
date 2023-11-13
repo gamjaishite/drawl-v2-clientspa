@@ -5,6 +5,7 @@ import {useInfiniteQuery} from '@tanstack/react-query'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import {Link} from 'react-router-dom'
 import {useEffect, useState} from 'react'
+import {PostData} from '@/types'
 
 const Dashboard = () => {
   const [cookies] = useCookies()
@@ -46,11 +47,12 @@ const Dashboard = () => {
       refetch()
       setIsRefetch(false)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isRefetch])
 
   return (
     <>
-      <div className="flex flex-col gap-6 max-w-2xl w-full">
+      <div className="flex flex-col justify-center items-center gap-6 w-full">
         {cookies.suka_nyabun && (
           <div className="fixed bottom-20 right-8">
             <AddPostDialog setIsRefetch={setIsRefetch} />
@@ -61,13 +63,14 @@ const Dashboard = () => {
           hasMore={hasNextPage}
           loader={<div>Loading...</div>}
           dataLength={posts ? posts.length : 0}
-          className="flex flex-col gap-6"
+          className="flex flex-col gap-6 max-w-4xl w-full lg:w-[32rem] xl:w-[56rem]"
         >
           {posts &&
-            posts.map((post: any, index: number) => (
-              <Link to={`/post/${post.uuid}`} className="font-normal">
+            posts.map((post: PostData, index: number) => (
+              <Link key={index} to={`/post/${post.uuid}`} className="font-normal w-full">
                 <PostCard
                   key={index}
+                  userId={post.userId}
                   postContent={post.content}
                   catalogTitle={post.catalogTitle}
                   catalogPoster={post.catalogPoster}

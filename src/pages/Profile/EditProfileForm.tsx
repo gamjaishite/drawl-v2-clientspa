@@ -19,6 +19,7 @@ import {
 } from '@/components/ui/form'
 import {ProfileData} from '@/types'
 import {Info} from 'lucide-react'
+import {useCookies} from 'react-cookie'
 
 const MAX_FILE_SIZE = 1_000_000
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
@@ -101,6 +102,7 @@ export const EditProfileForm = ({
   )
   const avatarInput = useRef<HTMLInputElement>(null)
   const coverInput = useRef<HTMLInputElement>(null)
+  const [cookies] = useCookies(['suka_nyabun'])
 
   const editProfileForm = useForm<z.infer<typeof editProfileFormSchema>>({
     resolver: zodResolver(editProfileFormSchema),
@@ -131,6 +133,9 @@ export const EditProfileForm = ({
       {
         method: 'PUT',
         body: formData,
+        headers: {
+          Authorization: `Bearer ${cookies.suka_nyabun}`,
+        },
       },
     )
 
@@ -141,7 +146,6 @@ export const EditProfileForm = ({
         ...profile.data,
       })
       toast.success('Profile updated')
-      window.location.href = `/profile/${values.username}`
     } else {
       const error = await result.json()
       toast.error(error.message)

@@ -1,5 +1,5 @@
 import {useAuth} from '@/hooks'
-import {ArrowLeft, Home, Moon, Sun, User} from 'lucide-react'
+import {ArrowLeft, Flag, Home, Moon, Sun, Tv, User, Verified} from 'lucide-react'
 import {Button} from '../ui/button'
 import {Switch} from '../ui/switch'
 import {useTheme} from '@/components/theme-provider'
@@ -43,7 +43,7 @@ const BasicSidebar = () => {
           <span className="hidden md:block">Home</span>
         </Button>
       </a>
-      <a href={`/profile/${auth.user?.username}`} className="text-foreground">
+      <a href={`/profile/${auth.user?.id}`} className="text-foreground">
         <Button
           variant={'ghost'}
           size={'lg'}
@@ -59,35 +59,37 @@ const BasicSidebar = () => {
 
 const AdminSidebar = () => {
   return (
-    <div className="flex flex-col gap-2">
-      <Button
-        variant={'ghost'}
-        size={'lg'}
-        className="justify-start space-x-2 px-4 text-xl w-full"
-      >
-        Dashboard
-      </Button>
-      <Button
-        variant={'ghost'}
-        size={'lg'}
-        className="justify-start space-x-2 px-4 text-xl w-full"
-      >
-        Profile
-      </Button>
-      <Button
-        variant={'ghost'}
-        size={'lg'}
-        className="justify-start space-x-2 px-4 text-xl w-full"
-      >
-        Settings
-      </Button>
-      <Button
-        variant={'ghost'}
-        size={'lg'}
-        className="justify-start space-x-2 px-4 text-xl w-full"
-      >
-        Users
-      </Button>
+    <div className="flex md:flex-col justify-around md:justify-normal gap-2">
+      <a href={`/catalog-request`} className="text-foreground">
+        <Button
+          variant={'ghost'}
+          size={'lg'}
+          className="justify-start space-x-2 px-4 text-xl w-full"
+        >
+          <Tv />
+          <span className="hidden md:block">Catalogs</span>
+        </Button>
+      </a>
+      <a href={`/verification-request`} className="text-foreground">
+        <Button
+          variant={'ghost'}
+          size={'lg'}
+          className="justify-start space-x-2 px-4 text-xl w-full"
+        >
+          <Verified />
+          <span className="hidden md:block">Verifications</span>
+        </Button>
+      </a>
+      <a href={`/report-request`} className="text-foreground">
+        <Button
+          variant={'ghost'}
+          size={'lg'}
+          className="justify-start space-x-2 px-4 text-xl w-full"
+        >
+          <Flag />
+          <span className="hidden md:block">Reports</span>
+        </Button>
+      </a>
     </div>
   )
 }
@@ -122,7 +124,7 @@ const MainLayout = ({title = '', children}: MainLayoutProps) => {
         <h4 className="px-4 mb-4 hidden md:block">DQ</h4>
         <CurrentSidebar />
       </aside>
-      <div className="w-full px-0 md:px-24">
+      <div className="w-full px-0 lg:px-24">
         <header className="sticky top-0 z-40 py-4 px-5 md:px-10 flex flex-row justify-between items-center gap-4 bg-background/30 backdrop-blur-lg">
           <div className="flex flex-row items-center gap-4">
             {!title.toLowerCase().includes('home') && (

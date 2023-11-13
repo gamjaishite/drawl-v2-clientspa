@@ -3,10 +3,11 @@ import {Link} from 'react-router-dom'
 import {Verified} from 'lucide-react'
 
 const ThreadCard = (props: {
-  avatar: string;
+  avatar?: string;
   username: string;
   verified: boolean;
   thread: string;
+  userId: string;
 }) => {
   return (
     <div className='border rounded-md p-6 flex flex-row gap-6'>
@@ -18,7 +19,7 @@ const ThreadCard = (props: {
         <AvatarFallback>{props.username ? props.username[0] : 'D'}</AvatarFallback>
       </Avatar>
       <div className='flex flex-col gap-3 w-full'>
-        <Link to={`/profile/${props.username}`} className='flex items-center gap-1 max-w-max'>
+        <Link to={`/profile/${props.userId}`} className='flex items-center gap-1 max-w-max'>
           <span>{props.username}</span>
           {props.verified && (
             <Verified size={22} fill='#8b5cf6' color='white' />

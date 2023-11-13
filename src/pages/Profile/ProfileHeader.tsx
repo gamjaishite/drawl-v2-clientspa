@@ -110,7 +110,7 @@ export const ProfileHeader = ({profile, setProfile}: ProfileHeaderProps) => {
                       </DialogFooter>
                     </DialogContent>
                   </Dialog>
-                  <Button>Follow</Button>
+                  <Button>{profile.isFollowing ? 'Unfollow' : 'Follow'}</Button>
                 </>
               ) : (
                 <>

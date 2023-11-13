@@ -63,10 +63,6 @@ const AddPostDialog = (props: {setIsRefetch: (x: boolean) => void}) => {
 
   const [countChars, setCountChars] = useState(form.getValues('content').length)
 
-  useEffect(() => {
-    setCountChars(form.getValues('content').length)
-  }, [form.getValues('content').length])
-
   const onSubmit = async (values: z.infer<typeof addPostSchema>) => {
     if (!selected) {
       setCatalogError('Please select one catalog')
@@ -94,12 +90,10 @@ const AddPostDialog = (props: {setIsRefetch: (x: boolean) => void}) => {
       if (!res.ok) {
         // do something
         console.log(resData.message)
-        toast(resData.message, {
-          type: 'error',
-        })
+        toast.error(resData.message)
       }
 
-      toast('Post created successfully! 🌸')
+      toast.success('Post created successfully! 🌸')
       setOpen(false)
       props.setIsRefetch(true)
     } catch (e) {
@@ -188,6 +182,10 @@ const AddPostDialog = (props: {setIsRefetch: (x: boolean) => void}) => {
                           placeholder="This drama is good as f***"
                           className="min-h-[300px] border-none resize-none"
                           {...field}
+                          onChange={(e) => {
+                            field.onChange(e)
+                            setCountChars(e.target.value.length)
+                          }}
                         />
                       </FormControl>
                       <div className="flex justify-end">

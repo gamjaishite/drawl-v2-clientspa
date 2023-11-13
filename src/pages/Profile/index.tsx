@@ -5,15 +5,30 @@ import {toast} from 'react-toastify'
 import {ProfileError} from './ProfileError'
 import {ProfileData} from '@/types'
 import {ProfileHeader} from './ProfileHeader'
+import {useCookies} from 'react-cookie'
+import {useAuth} from '@/hooks'
 
 const Profile = () => {
-  const {username} = useParams()
+  let {id} = useParams()
+  const {user} = useAuth()
   const [profile, setProfile] = useState<ProfileData | undefined>()
   const [error, setError] = useState<string | undefined>()
-  console.log(username)
-  async function getProfile(username: string) {
+  const [cookies] = useCookies(['suka_nyabun'])
+
+  if (!id) {
+    id = user?.id
+  }
+
+  console.log(id)
+  async function getProfile(id: string, token: string) {
     const result = await fetch(
-      `${import.meta.env.VITE_REST_SERVICE_BASE_URL}/profile/${username}`,
+      `${import.meta.env.VITE_REST_SERVICE_BASE_URL}/profile/${id}`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
     )
 
     if (result.ok) {
@@ -29,8 +44,8 @@ const Profile = () => {
   }
 
   useEffect(() => {
-    getProfile(username ?? '')
-  }, [username])
+    getProfile(id ?? '', cookies.suka_nyabun ?? '')
+  }, [id, cookies.suka_nyabun])
 
   useEffect(() => {
     console.log(profile)

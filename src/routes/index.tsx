@@ -31,11 +31,11 @@ const routes = [
   },
   // unprotected
   {
-    path: '/profile/:username',
+    path: '/profile/:id',
     element: <App title="Profile" />,
     children: [
       {
-        path: '/profile/:username',
+        path: '/profile/:id',
         element: <Profile />,
       },
     ],
@@ -62,6 +62,17 @@ const routes = [
       {
         path: '/auth/login',
         element: <Login />,
+      },
+    ],
+  },
+  // protected for logged in user
+  {
+    path: '/profile',
+    element: <App title="Profile" />,
+    children: [
+      {
+        path: '/profile',
+        element: <Profile />,
       },
     ],
   },
