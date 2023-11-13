@@ -7,7 +7,9 @@ import {Button} from '@/components/ui/button.tsx'
 import {Textarea} from '@/components/ui/textarea.tsx'
 import {useEffect, useState} from 'react'
 import {useCookies} from 'react-cookie'
-import {useMutation} from '@tanstack/react-query'
+import {useInfiniteQuery, useMutation} from '@tanstack/react-query'
+import InfiniteScroll from 'react-infinite-scroll-component'
+import ThreadCard from '@/components/card/ThreadCard.tsx'
 
 const ThreadSection = (props: {
   postId: string;
@@ -40,54 +42,64 @@ const ThreadSection = (props: {
 
   const getThreads = async ({pageParam = 1}) => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_REST_SERVICE_BASE_URL}/discuss-thread`)
+      const res = await fetch(`${import.meta.env.VITE_REST_SERVICE_BASE_URL}/discuss-thread?page=${pageParam}&perPage=${4}&postId=${props.postId}`)
       const resData = await res.json()
 
-      if (!response.ok) {
+      if (!res.ok) {
         throw new Error(resData.message)
       }
 
-      return resData.data
+      return {...resData.data, prevOffset: pageParam}
     } catch (e) {
       console.log(e)
-      throw new Error('Something went wrong, please try again later')
+      throw new Error(e.message)
     }
   }
 
-  const createThread = async ({thread}: {thread: string}) => {
-    const res = await fetch(`${import.meta.env.VITE_REST_SERVICE_BASE_URL}/discuss-thread`, {
+  const {data, fetchNextPage, hasNextPage, refetch} = useInfiniteQuery({
+    queryKey: ['threads'],
+    queryFn: getThreads,
+    initialPageParam: 1,
+    getNextPageParam: lastPage => {
+      if (lastPage.page < lastPage.totalPage) {
+        return lastPage.prevOffset + 1
+      }
+    },
+  })
+
+
+  const threads = data?.pages.reduce((acc, page) => {
+    return [...acc, ...page.items]
+  }, [])
+
+  const createThread = async (thread: string) => {
+    return await fetch(`${import.meta.env.VITE_REST_SERVICE_BASE_URL}/discuss-thread`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${cookies.suka_nyabun}`,
+        'Content-Type': 'application/json',
       },
       credentials: 'include',
       body: JSON.stringify({
-        thread,
+        thread: thread,
         discussPostId: props.postId,
       }),
     })
-    const resData = await res.json()
-
-    if (!response.ok) {
-      throw new Error(resData.message)
-    }
-
-    return resData.data
   }
 
   const {mutate} = useMutation({
     mutationFn: createThread,
+    onSuccess: () => refetch(),
   })
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    mutate({
-      thread: values.thread,
-    })
+    mutate(values.thread)
+    form.reset()
   }
 
   return (
     <div className='flex flex-col gap-6 my-6'>
-      <h4>Reply (20)</h4>
+      <h4>Reply ({data && data.pages && data.pages[0].totalItem})</h4>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-4'>
           <FormField
@@ -111,7 +123,13 @@ const ThreadSection = (props: {
           </div>
         </form>
       </Form>
-
+      <InfiniteScroll next={() => fetchNextPage()} hasMore={hasNextPage} loader={<div>Loading...</div>}
+                      dataLength={threads ? threads.length : 0} className='flex flex-col gap-6'>
+        {threads && threads.map((thread: any, index: number) => (
+          <ThreadCard thread={thread.content} username={thread.username} avatar={thread.avatar}
+                      verified={thread.verified} />
+        ))}
+      </InfiniteScroll>
     </div>
   )
 }
