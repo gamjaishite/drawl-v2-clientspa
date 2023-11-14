@@ -44,3 +44,13 @@ export interface VerificationRequestData {
   userId: string;
   uuid: string;
 }
+
+export interface ReportUserData {
+  content: string;
+  createdAt: string;
+  id: string;
+  reportedId: string;
+  reporterId: string;
+  updatedAt: string;
+  uuid: string;
+}

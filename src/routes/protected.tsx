@@ -29,7 +29,7 @@ export const ProtectedRoute = ({roles}: ProtectedRouteProps) => {
     }
   }
 
-  useEffect(protect, [auth.isLoggedIn, auth.user, navigate, roles])
+  useEffect(protect, [auth.isLoggedIn, auth.user, navigate, roles, auth.loading])
 
   if (auth.loading)
     return (

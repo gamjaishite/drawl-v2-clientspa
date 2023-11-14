@@ -143,9 +143,11 @@ export function TableUser() {
           {verificationRequests.map((request) => (
             <TableRow key={request.id}>
               <TableCell className="font-medium">{request.id}</TableCell>
-              <TableCell className="font-medium">{request.userId}</TableCell>
+              <TableCell className="font-medium">
+                <a href={`/profile/${request.userId}`}>{request.userId}</a>
+              </TableCell>
               <TableCell className="font-medium">{request.createdAt}</TableCell>
-              <TableCell className="text-right">
+              <TableCell>
                 <div className="w-fit">
                   <Button
                     variant="outline"
