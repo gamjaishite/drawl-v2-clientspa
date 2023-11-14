@@ -1,4 +1,4 @@
-import { TableUser } from "@/components/table/Table";
+import { TableUser } from "@/components/table/TableUser";
 
 const VerifyUser = () => {
     return (

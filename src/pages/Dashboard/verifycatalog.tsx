@@ -1,4 +1,4 @@
-import { TableCatalog, } from "@/components/table/Table";
+import { TableCatalog, } from "@/components/table/TableCatalog";
 import {useCookies} from 'react-cookie'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import {useEffect, useState} from 'react'

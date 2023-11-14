@@ -1,4 +1,4 @@
-import { TableReport, } from "@/components/table/Table";
+import { TableReport, } from "@/components/table/TableReport";
 
 const VerifyReport = () => {
     return (
