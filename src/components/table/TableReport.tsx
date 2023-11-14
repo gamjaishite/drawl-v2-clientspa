@@ -15,6 +15,14 @@ import {ReportUserData} from '@/types'
 import {useCookies} from 'react-cookie'
 import {toast} from 'react-toastify'
 import ReactPaginate from 'react-paginate'
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '../ui/dialog'
 
 export function TableReport() {
   // Fetch REST API
@@ -136,25 +144,56 @@ export function TableReport() {
               <TableCell className="font-medium">
                 <a href={`/profile/${report.reportedId}`}>{report.reportedId}</a>
               </TableCell>
-              <TableCell className="font-medium">
-                <a href={`/profile/${report.reportedId}`}>{report.content}</a>
-              </TableCell>
+              <TableCell className="font-medium">{report.content}</TableCell>
               <TableCell>
                 <div>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => handleAccept(report.reportedId)}
-                  >
-                    <Check className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => handleReject(report.uuid)}
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
+                  <Dialog>
+                    <DialogTrigger>
+                      <Button variant="outline" size="icon">
+                        <Check className="h-4 w-4" />
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="w-[calc(100vw-4rem)] sm:max-w-[425px] rounded-lg">
+                      <DialogHeader>
+                        <DialogTitle className="text-start">
+                          Block {report.reportedId}?
+                        </DialogTitle>
+                      </DialogHeader>
+                      <p className="text-start">
+                        Are you sure you want to block {report.reportedId}?
+                      </p>
+                      <DialogFooter>
+                        <Button
+                          type="submit"
+                          onClick={() => handleAccept(report.reportedId)}
+                        >
+                          Yes
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                  <Dialog>
+                    <DialogTrigger>
+                      <Button variant="outline" size="icon">
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="w-[calc(100vw-4rem)] sm:max-w-[425px] rounded-lg">
+                      <DialogHeader>
+                        <DialogTitle className="text-start">
+                          Block {report.reportedId}?
+                        </DialogTitle>
+                      </DialogHeader>
+                      <p className="text-start">
+                        Are you sure you want to reject report on {report.reportedId}?
+                      </p>
+                      <DialogFooter>
+                        <Button type="submit" onClick={() => handleReject(report.uuid)}>
+                          Yes
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
                 </div>
               </TableCell>
             </TableRow>

@@ -15,6 +15,14 @@ import {useCookies} from 'react-cookie'
 import {toast} from 'react-toastify'
 import {VerificationRequestData} from '@/types'
 import ReactPaginate from 'react-paginate'
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '../ui/dialog'
 
 export function TableUser() {
   // Fetch REST API
@@ -149,20 +157,58 @@ export function TableUser() {
               <TableCell className="font-medium">{request.createdAt}</TableCell>
               <TableCell>
                 <div className="w-fit">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => handleAccept(request.userId)}
-                  >
-                    <Check className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => handleReject(request.userId)}
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
+                  <Dialog>
+                    <DialogTrigger>
+                      <Button variant="outline" size="icon">
+                        <Check className="h-4 w-4" />
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="w-[calc(100vw-4rem)] sm:max-w-[425px] rounded-lg">
+                      <DialogHeader>
+                        <DialogTitle className="text-start">
+                          Accept {request.userId}?
+                        </DialogTitle>
+                      </DialogHeader>
+                      <p className="text-start">
+                        Are you sure you want to acceot verification request of user
+                        {request.userId}?
+                      </p>
+                      <DialogFooter>
+                        <Button
+                          type="submit"
+                          onClick={() => handleAccept(request.userId)}
+                        >
+                          Yes
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                  <Dialog>
+                    <DialogTrigger>
+                      <Button variant="outline" size="icon">
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="w-[calc(100vw-4rem)] sm:max-w-[425px] rounded-lg">
+                      <DialogHeader>
+                        <DialogTitle className="text-start">
+                          Reject {request.userId}?
+                        </DialogTitle>
+                      </DialogHeader>
+                      <p className="text-start">
+                        Are you sure you want to reject verification request of user
+                        {request.userId}?
+                      </p>
+                      <DialogFooter>
+                        <Button
+                          type="submit"
+                          onClick={() => handleReject(request.userId)}
+                        >
+                          Yes
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
                 </div>
               </TableCell>
             </TableRow>
