@@ -11,7 +11,7 @@ export interface ProfileData {
     updatedAt: string;
     username: string;
     verified: boolean;
-    isFollowing: boolean;
+    followingId?: string | null;
   }
   
 export interface PostData {

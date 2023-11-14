@@ -16,9 +16,10 @@ import {ProfileData} from '@/types'
 import {EditProfileForm} from './EditProfileForm'
 import {useCookies} from 'react-cookie'
 import {toast} from 'react-toastify'
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import {useAuth} from '@/hooks'
 import {cn} from '@/lib/utils'
+import {useNavigate} from 'react-router-dom'
 
 interface ProfileHeaderProps {
   profile: ProfileData
@@ -30,6 +31,11 @@ export const ProfileHeader = ({profile, setProfile}: ProfileHeaderProps) => {
   const {user, loading} = useAuth()
   const [cookies] = useCookies(['suka_nyabun'])
   const [postLoading, setPostLoading] = useState(false)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    console.log(profile)
+  }, [profile])
 
   const handleVerificationRequest = async () => {
     console.log('Verification request')
@@ -54,6 +60,85 @@ export const ProfileHeader = ({profile, setProfile}: ProfileHeaderProps) => {
       }
 
       toast.success(resData.message)
+    } catch (e) {
+      console.log(e)
+    } finally {
+      setPostLoading(false)
+    }
+  }
+
+  const handleFollow = async () => {
+    if (!user) {
+      navigate('/auth/login')
+      return
+    }
+    try {
+      setPostLoading(true)
+      const res = await fetch(
+        `${import.meta.env.VITE_REST_SERVICE_BASE_URL}/user-follow`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${cookies.suka_nyabun}`,
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+          body: JSON.stringify({
+            followingId: profile.id,
+          }),
+        },
+      )
+
+      const resData = await res.json()
+      console.log(resData)
+      if (!res.ok || resData.status !== 200) {
+        toast.error(resData.message)
+        return
+      }
+
+      toast.success(resData.message)
+      setProfile({
+        ...profile,
+        followingId: resData.data.id,
+        followerCount: profile.followerCount + 1,
+      })
+      console.log(resData.data.id)
+    } catch (e) {
+      console.log(e)
+    } finally {
+      setPostLoading(false)
+    }
+  }
+
+  const handleUnfollow = async () => {
+    try {
+      setPostLoading(true)
+      const res = await fetch(
+        `${import.meta.env.VITE_REST_SERVICE_BASE_URL}/user-follow/${
+          profile.followingId
+        }`,
+        {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${cookies.suka_nyabun}`,
+          },
+          credentials: 'include',
+        },
+      )
+
+      const resData = await res.json()
+      console.log(resData)
+      if (!res.ok || resData.status !== 200) {
+        toast.error(resData.message)
+        return
+      }
+
+      toast.success(resData.message)
+      setProfile({
+        ...profile,
+        followingId: null,
+        followerCount: profile.followerCount - 1,
+      })
     } catch (e) {
       console.log(e)
     } finally {
@@ -110,7 +195,9 @@ export const ProfileHeader = ({profile, setProfile}: ProfileHeaderProps) => {
                       </DialogFooter>
                     </DialogContent>
                   </Dialog>
-                  <Button>{profile.isFollowing ? 'Unfollow' : 'Follow'}</Button>
+                  <Button onClick={profile.followingId ? handleUnfollow : handleFollow}>
+                    {profile.followingId ? 'Unfollow' : 'Follow'}
+                  </Button>
                 </>
               ) : (
                 <>

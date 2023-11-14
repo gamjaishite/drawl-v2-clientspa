@@ -36,7 +36,7 @@ const Post = () => {
       {post && (
         <>
           <PostCard
-            userId={post.id}
+            userId={post.userId}
             postContent={post.content}
             catalogTitle={post.catalogTitle}
             catalogDescription={post.catalogDescription}
