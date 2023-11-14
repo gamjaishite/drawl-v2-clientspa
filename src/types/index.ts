@@ -35,3 +35,12 @@ export interface ThreadData {
   verified: boolean;
   userId: string;
 }
+
+export interface VerificationRequestData {
+  createdAt: string;
+  id: string;
+  status: string;
+  updatedAt: string;
+  userId: string;
+  uuid: string;
+}

@@ -1,13 +1,12 @@
-import { TableUser } from "@/components/table/TableUser";
+import {TableUser} from '@/components/table/TableUser'
 
 const VerifyUser = () => {
-    return (
-      <>
-        <main>Berikut adalah tabel untuk mem-verify user:</main>
-        <TableUser />
-      </>
-    );
-    
-  };
-  
-  export default VerifyUser;
+  return (
+    <>
+      <h4 className="mb-4">Verification Request</h4>
+      <TableUser />
+    </>
+  )
+}
+
+export default VerifyUser
