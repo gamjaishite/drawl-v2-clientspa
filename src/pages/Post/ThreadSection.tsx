@@ -1,6 +1,6 @@
-import {z} from 'zod'
-import {useForm} from 'react-hook-form'
-import {zodResolver} from '@hookform/resolvers/zod'
+import { z } from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Form,
   FormControl,
@@ -8,17 +8,20 @@ import {
   FormItem,
   FormMessage,
 } from '@/components/ui/form.tsx'
-import {Button} from '@/components/ui/button.tsx'
-import {Textarea} from '@/components/ui/textarea.tsx'
-import {useState} from 'react'
-import {useCookies} from 'react-cookie'
-import {useInfiniteQuery, useMutation} from '@tanstack/react-query'
+import { Button } from '@/components/ui/button.tsx'
+import { Textarea } from '@/components/ui/textarea.tsx'
+import { useState } from 'react'
+import { useCookies } from 'react-cookie'
+import { useInfiniteQuery, useMutation } from '@tanstack/react-query'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import ThreadCard from '@/components/card/ThreadCard.tsx'
-import {ThreadData} from '@/types'
+import { ThreadData } from '@/types'
+import { useAuth } from '@/hooks'
+import { Link } from 'react-router-dom'
 
-const ThreadSection = (props: {postId: string}) => {
+const ThreadSection = (props: { postId: string }) => {
   const [cookies] = useCookies()
+  const auth = useAuth()
   const formSchema = z.object({
     thread: z
       .string({
@@ -44,11 +47,10 @@ const ThreadSection = (props: {postId: string}) => {
 
   const [countChars, setCountChars] = useState(form.getValues('thread').length)
 
-  const getThreads = async ({pageParam = 1}) => {
+  const getThreads = async ({ pageParam = 1 }) => {
     try {
       const res = await fetch(
-        `${
-          import.meta.env.VITE_REST_SERVICE_BASE_URL
+        `${import.meta.env.VITE_REST_SERVICE_BASE_URL
         }/discuss-thread?page=${pageParam}&perPage=${4}&postId=${props.postId}`,
       )
       const resData = await res.json()
@@ -57,7 +59,7 @@ const ThreadSection = (props: {postId: string}) => {
         throw new Error(resData.message)
       }
 
-      return {...resData.data, prevOffset: pageParam}
+      return { ...resData.data, prevOffset: pageParam }
     } catch (e) {
       console.log(e)
       if (e instanceof Error) {
@@ -68,7 +70,7 @@ const ThreadSection = (props: {postId: string}) => {
     }
   }
 
-  const {data, fetchNextPage, hasNextPage, refetch} = useInfiniteQuery({
+  const { data, fetchNextPage, hasNextPage, refetch } = useInfiniteQuery({
     queryKey: ['threads'],
     queryFn: getThreads,
     initialPageParam: 1,
@@ -98,7 +100,7 @@ const ThreadSection = (props: {postId: string}) => {
     })
   }
 
-  const {mutate} = useMutation({
+  const { mutate } = useMutation({
     mutationFn: createThread,
     onSuccess: () => refetch(),
   })
@@ -112,42 +114,50 @@ const ThreadSection = (props: {postId: string}) => {
   return (
     <div className="flex flex-col gap-6 my-6">
       <h4>Reply ({data && data.pages && data.pages[0].totalItem})</h4>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
-          <FormField
-            control={form.control}
-            name="thread"
-            render={({field}) => (
-              <FormItem>
-                <FormControl>
-                  <Textarea
-                    placeholder="This is not true 😔"
-                    className="min-h-[200px]"
-                    {...field}
-                    onChange={(e) => {
-                      setCountChars(e.target.value.length)
-                      field.onChange(e)
-                    }}
-                  />
-                </FormControl>
-                <div className="flex justify-end">
-                  <FormMessage className="flex-1" />
-                  <span
-                    className={`${
-                      countChars > 3000 ? 'text-destructive' : 'text-zinc-400'
-                    } text-sm font-medium`}
-                  >
-                    {countChars}/3000 chars.
-                  </span>
-                </div>
-              </FormItem>
-            )}
-          />
-          <div className="flex justify-end">
-            <Button type="submit">Reply</Button>
-          </div>
-        </form>
-      </Form>
+      {auth.isLoggedIn ? (
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
+            <FormField
+              control={form.control}
+              name="thread"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Textarea
+                      placeholder="This is not true 😔"
+                      className="min-h-[200px]"
+                      {...field}
+                      onChange={(e) => {
+                        setCountChars(e.target.value.length)
+                        field.onChange(e)
+                      }}
+                    />
+                  </FormControl>
+                  <div className="flex justify-end">
+                    <FormMessage className="flex-1" />
+                    <span
+                      className={`${countChars > 3000 ? 'text-destructive' : 'text-zinc-400'
+                        } text-sm font-medium`}
+                    >
+                      {countChars}/3000 chars.
+                    </span>
+                  </div>
+                </FormItem>
+              )}
+            />
+            <div className="flex justify-end">
+              <Button type="submit">Reply</Button>
+            </div>
+          </form>
+        </Form>
+      ) : (
+        <div className='w-full flex items-center justify-center p-4 rounded-md border'>
+          <span>Please {' '}
+            <Link to='/auth/login'>
+              Log In
+            </Link> to Reply</span>
+        </div>
+      )}
       <InfiniteScroll
         next={() => fetchNextPage()}
         hasMore={hasNextPage}
@@ -164,6 +174,7 @@ const ThreadSection = (props: {postId: string}) => {
               avatar={thread.avatar}
               verified={thread.verified}
               userId={thread.userId}
+              createdAt={thread.createdAt}
             />
           ))}
       </InfiniteScroll>

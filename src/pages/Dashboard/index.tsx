@@ -1,33 +1,32 @@
-import {PostCard} from '@/components/card/PostCard'
+import { PostCard } from '@/components/card/PostCard'
 import AddPostDialog from '@/pages/Dashboard/AddPostDialog.tsx'
-import {useCookies} from 'react-cookie'
-import {useInfiniteQuery} from '@tanstack/react-query'
+import { useCookies } from 'react-cookie'
+import { useInfiniteQuery } from '@tanstack/react-query'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import {Link} from 'react-router-dom'
-import {useEffect, useState} from 'react'
-import {PostData} from '@/types'
+import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { PostData } from '@/types'
 
 const Dashboard = () => {
   const [cookies] = useCookies()
   const [isRefetch, setIsRefetch] = useState(false)
 
-  const getPosts = async ({pageParam = 1}) => {
+  const getPosts = async ({ pageParam = 1 }) => {
     try {
       const res = await fetch(
-        `${
-          import.meta.env.VITE_REST_SERVICE_BASE_URL
+        `${import.meta.env.VITE_REST_SERVICE_BASE_URL
         }/discuss-post?page=${pageParam}&perPage=${4}`,
       )
       const resData = await res.json()
 
-      return {...resData.data, prevOffset: pageParam}
+      return { ...resData.data, prevOffset: pageParam }
     } catch (e) {
       console.log(e)
-      return {items: [], page: 0, perPage: 0, totalPage: 0, prevOffset: pageParam}
+      return { items: [], page: 0, perPage: 0, totalPage: 0, prevOffset: pageParam }
     }
   }
 
-  const {data, fetchNextPage, hasNextPage, refetch} = useInfiniteQuery({
+  const { data, fetchNextPage, hasNextPage, refetch } = useInfiniteQuery({
     queryKey: ['posts'],
     queryFn: getPosts,
     initialPageParam: 1,
@@ -78,6 +77,7 @@ const Dashboard = () => {
                   username={post.username}
                   avatar={post.avatar}
                   verified={post.verified}
+                  createdAt={post.createdAt}
                 />
               </Link>
             ))}

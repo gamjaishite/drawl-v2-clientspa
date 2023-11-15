@@ -1,7 +1,7 @@
-import {PostCard} from '@/components/card/PostCard.tsx'
-import {useParams} from 'react-router-dom'
-import {useCookies} from 'react-cookie'
-import {useQuery} from '@tanstack/react-query'
+import { PostCard } from '@/components/card/PostCard.tsx'
+import { useParams } from 'react-router-dom'
+import { useCookies } from 'react-cookie'
+import { useQuery } from '@tanstack/react-query'
 import ThreadSection from '@/pages/Post/ThreadSection.tsx'
 
 const Post = () => {
@@ -21,10 +21,10 @@ const Post = () => {
     if (!res.ok) {
       throw new Error(resData.message)
     }
-    return {...resData}
+    return { ...resData }
   }
 
-  const {data} = useQuery({
+  const { data } = useQuery({
     queryKey: ['post'],
     queryFn: getPost,
   })
@@ -36,7 +36,7 @@ const Post = () => {
       {post && (
         <>
           <PostCard
-            userId={post.id}
+            userId={post.userId}
             postContent={post.content}
             catalogTitle={post.catalogTitle}
             catalogDescription={post.catalogDescription}

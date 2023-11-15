@@ -1,16 +1,18 @@
-import {PostCard} from '@/components/card/PostCard'
-import {useEffect, useState} from 'react'
-import {useParams} from 'react-router-dom'
-import {toast} from 'react-toastify'
-import {ProfileError} from './ProfileError'
-import {ProfileData} from '@/types'
-import {ProfileHeader} from './ProfileHeader'
-import {useCookies} from 'react-cookie'
-import {useAuth} from '@/hooks'
+import { PostCard } from '@/components/card/PostCard'
+import { useEffect, useState } from 'react'
+import { Link, useParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import { ProfileError } from './ProfileError'
+import { PostData, ProfileData } from '@/types'
+import { ProfileHeader } from './ProfileHeader'
+import { useCookies } from 'react-cookie'
+import { useAuth } from '@/hooks'
+import { useInfiniteQuery } from '@tanstack/react-query'
+import InfiniteScroll from 'react-infinite-scroll-component'
 
 const Profile = () => {
-  let {id} = useParams()
-  const {user} = useAuth()
+  let { id } = useParams()
+  const { user } = useAuth()
   const [profile, setProfile] = useState<ProfileData | undefined>()
   const [error, setError] = useState<string | undefined>()
   const [cookies] = useCookies(['suka_nyabun'])
@@ -51,6 +53,34 @@ const Profile = () => {
     console.log(profile)
   }, [profile])
 
+  const getPosts = async ({ pageParam = 1 }) => {
+    const res = await fetch(`${import.meta.env.VITE_REST_SERVICE_BASE_URL}/profile/${id}/post?page=${pageParam}&perPage=${4}`)
+    const resData = await res.json()
+
+    if (!res.ok) {
+      throw new Error(resData.message)
+    }
+
+    return { ...resData.data, prevOffset: pageParam }
+  }
+  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery({
+    queryKey: ['profilePosts'],
+    queryFn: getPosts,
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => {
+      if (lastPage.items.length === lastPage.perPage) {
+        return lastPage.prevOffset + 1
+      }
+    }
+  })
+
+  const posts = data?.pages.reduce((acc, page) => {
+    return [...acc, ...page.items]
+  }, [])
+
+  console.log(posts)
+
+
   if (!profile) {
     return <ProfileError error={error} />
   }
@@ -60,9 +90,13 @@ const Profile = () => {
       <ProfileHeader profile={profile} setProfile={setProfile} />
       <h4 className="my-6">Posts</h4>
       <div className="flex flex-col gap-6">
-        <PostCard />
-
-        <PostCard />
+        <InfiniteScroll next={() => fetchNextPage()} hasMore={hasNextPage} loader={<div>Loading...</div>} dataLength={posts ? posts.length : 0} className='flex flex-col gap-6'>
+          {posts && posts.map((post: PostData, index: number) => (
+            <Link key={index} to={`/post/${post.uuid}`} className='font-normal w-full'>
+              <PostCard avatar={post.avatar} catalogDescription={post.catalogDescription} catalogPoster={post.catalogPoster} catalogTitle={post.catalogTitle} createdAt={post.createdAt} postContent={post.content} userId={post.userId} username={post.username} verified={post.verified} />
+            </Link>
+          ))}
+        </InfiniteScroll>
       </div>
     </>
   )

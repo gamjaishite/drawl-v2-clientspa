@@ -1,6 +1,6 @@
-import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar.tsx'
-import {Link} from 'react-router-dom'
-import {Verified} from 'lucide-react'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar.tsx'
+import { Link } from 'react-router-dom'
+import { Verified } from 'lucide-react'
 
 const ThreadCard = (props: {
   avatar?: string;
@@ -8,6 +8,7 @@ const ThreadCard = (props: {
   verified: boolean;
   thread: string;
   userId: string;
+  createdAt: string;
 }) => {
   return (
     <div className='border rounded-md p-6 flex flex-row gap-6'>
@@ -25,6 +26,15 @@ const ThreadCard = (props: {
             <Verified size={22} fill='#8b5cf6' color='white' />
           )}
         </Link>
+        {props.createdAt && (
+          <span className='small text-zinc-400'>{new Date(props.createdAt).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric'
+          })}</span>
+        )}
         <p>
           {props.thread}
         </p>
