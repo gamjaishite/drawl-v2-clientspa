@@ -54,7 +54,7 @@ const Profile = () => {
   }, [profile])
 
   const getPosts = async ({ pageParam = 1 }) => {
-    const res = await fetch(`${import.meta.env.VITE_REST_SERVICE_BASE_URL}/profile/${id}/post?page=${pageParam}&perPage=${4}`)
+    const res = await fetch(`${import.meta.env.VITE_REST_SERVICE_BASE_URL}/profile/${id}/post?page=${pageParam}&perPage=${10}`)
     const resData = await res.json()
 
     if (!res.ok) {
@@ -78,8 +78,6 @@ const Profile = () => {
     return [...acc, ...page.items]
   }, [])
 
-  console.log(posts)
-
 
   if (!profile) {
     return <ProfileError error={error} />
@@ -93,10 +91,15 @@ const Profile = () => {
         <InfiniteScroll next={() => fetchNextPage()} hasMore={hasNextPage} loader={<div>Loading...</div>} dataLength={posts ? posts.length : 0} className='flex flex-col gap-6'>
           {posts && posts.map((post: PostData, index: number) => (
             <Link key={index} to={`/post/${post.uuid}`} className='font-normal w-full'>
-              <PostCard avatar={post.avatar} catalogDescription={post.catalogDescription} catalogPoster={post.catalogPoster} catalogTitle={post.catalogTitle} createdAt={post.createdAt} postContent={post.content} userId={post.userId} username={post.username} verified={post.verified} />
+              <PostCard avatar={post.avatar} catalogDescription={post.catalogDescription} catalogPoster={post.catalogPoster} catalogTitle={post.catalogTitle} createdAt={post.createdAt} postContent={post.content} userId={post.userId} username={post.username} verified={post.verified} role={post.role} />
             </Link>
           ))}
         </InfiniteScroll>
+        {(!posts || posts.length === 0) && (
+          <div className='w-full flex items-center justify-center p-4'>
+            <span>No Posts Found. 💤</span>
+          </div>
+        )}
       </div>
     </>
   )

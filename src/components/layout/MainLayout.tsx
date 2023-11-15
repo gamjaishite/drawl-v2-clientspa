@@ -58,9 +58,11 @@ const BasicSidebar = () => {
 }
 
 const AdminSidebar = () => {
+  const auth = useAuth()
+
   return (
     <div className="flex md:flex-col justify-around md:justify-normal gap-2">
-      <a href={`/catalog-request`} className="text-foreground">
+      <a href={`/admin/dashboard/verifycatalog`} className="text-foreground">
         <Button
           variant={'ghost'}
           size={'lg'}
@@ -70,7 +72,7 @@ const AdminSidebar = () => {
           <span className="hidden md:block">Catalogs</span>
         </Button>
       </a>
-      <a href={`/verification-request`} className="text-foreground">
+      <a href={`/admin/dashboard/verifyuser`} className="text-foreground">
         <Button
           variant={'ghost'}
           size={'lg'}
@@ -80,7 +82,7 @@ const AdminSidebar = () => {
           <span className="hidden md:block">Verifications</span>
         </Button>
       </a>
-      <a href={`/report-request`} className="text-foreground">
+      <a href={`/admin/dashboard/verifyreport`} className="text-foreground">
         <Button
           variant={'ghost'}
           size={'lg'}
@@ -88,6 +90,16 @@ const AdminSidebar = () => {
         >
           <Flag />
           <span className="hidden md:block">Reports</span>
+        </Button>
+      </a>
+      <a href={`/profile/${auth.user?.id}`} className="text-foreground">
+        <Button
+          variant={'ghost'}
+          size={'lg'}
+          className="justify-start space-x-2 px-4 text-xl w-full"
+        >
+          <User />
+          <span className="hidden md:block">Profile</span>
         </Button>
       </a>
     </div>
@@ -125,7 +137,7 @@ const MainLayout = ({title = '', children}: MainLayoutProps) => {
         <CurrentSidebar />
       </aside>
       <div className="w-full px-0 lg:px-24">
-        <header className="sticky top-0 z-40 py-4 px-5 md:px-10 flex flex-row justify-between items-center gap-4 bg-background/30 backdrop-blur-lg">
+        <header className="sticky top-0 z-40 py-4 px-5 md:px-10 flex flex-row flex-wrap justify-between items-center gap-4 bg-background/30 backdrop-blur-lg">
           <div className="flex flex-row items-center gap-4">
             {!title.toLowerCase().includes('home') && (
               <a href="/">
@@ -145,7 +157,9 @@ const MainLayout = ({title = '', children}: MainLayoutProps) => {
             )}
           </div>
         </header>
-        <main className="py-4 px-5 md:px-10 overflow-hidden">{children}</main>
+        <main className="py-4 px-5 md:px-10 overflow-hidden mb-16 md:mb-0">
+          {children}
+        </main>
       </div>
     </div>
   )

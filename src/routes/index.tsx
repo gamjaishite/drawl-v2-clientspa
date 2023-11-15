@@ -79,13 +79,29 @@ const routes = [
   // protected for admin
   {
     path: '/',
-    element: <App title="Admin Dashboard" />,
-    // {/* <ProtectedRoute roles={["ADMIN"]} /> */}
-
+    element: <ProtectedRoute roles={['ADMIN']} />,
     children: [
       {
-        path: '/admin/dashboard',
-        element: <Dashboard />,
+        path: '/',
+        element: <App title="Admin" />,
+        children: [
+          {
+            path: '/admin/dashboard',
+            element: <VerifyUser />,
+          },
+          {
+            path: '/admin/dashboard/verifyuser',
+            element: <VerifyUser />,
+          },
+          {
+            path: '/admin/dashboard/verifycatalog',
+            element: <VerifyCatalog />,
+          },
+          {
+            path: '/admin/dashboard/verifyreport',
+            element: <VerifyReport />,
+          },
+        ],
       },
     ],
   },
@@ -93,42 +109,7 @@ const routes = [
     path: '*',
     element: <FourOhFour />,
   },
-  {
-    path: '/',
-    element: <App title="Admin Dashboard - Verify Users" />,
-    // {/* <ProtectedRoute roles={["ADMIN"]} /> */}
 
-    children: [
-      {
-        path: '/admin/dashboard/verifyuser',
-        element: <VerifyUser />,
-      },
-    ],
-  },
-  {
-    path: '/',
-    element: <App title="Admin Dashboard - Verify Catalog" />,
-    // {/* <ProtectedRoute roles={["ADMIN"]} /> */}
-
-    children: [
-      {
-        path: '/admin/dashboard/verifycatalog',
-        element: <VerifyCatalog />,
-      },
-    ],
-  },
-  {
-    path: '/',
-    element: <App title="Admin Dashboard - Verify Report" />,
-    // {/* <ProtectedRoute roles={["ADMIN"]} /> */}
-
-    children: [
-      {
-        path: '/admin/dashboard/verifyreport',
-        element: <VerifyReport />,
-      },
-    ],
-  },
   {
     path: '*',
     element: <App title="Not Found" />,

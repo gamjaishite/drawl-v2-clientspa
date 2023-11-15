@@ -13,7 +13,7 @@ export const ProtectedRoute = ({roles}: ProtectedRouteProps) => {
   console.log(roles, auth.user?.role)
 
   const protect = () => {
-    if (roles.length > 0) {
+    if (!auth.loading && roles.length > 0) {
       if (!auth.isLoggedIn || !auth.user) {
         navigate('/auth/login')
         return
@@ -29,7 +29,7 @@ export const ProtectedRoute = ({roles}: ProtectedRouteProps) => {
     }
   }
 
-  useEffect(protect, [auth.isLoggedIn, auth.user, navigate, roles])
+  useEffect(protect, [auth.isLoggedIn, auth.user, navigate, roles, auth.loading])
 
   if (auth.loading)
     return (

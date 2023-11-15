@@ -26,7 +26,7 @@ const Dashboard = () => {
     }
   }
 
-  const { data, fetchNextPage, hasNextPage, refetch } = useInfiniteQuery({
+  const { data, fetchNextPage, hasNextPage, refetch, isLoading } = useInfiniteQuery({
     queryKey: ['posts'],
     queryFn: getPosts,
     initialPageParam: 1,
@@ -37,7 +37,7 @@ const Dashboard = () => {
     },
   })
 
-  const posts = data?.pages.reduce((acc, page) => {
+  const posts = data && data?.pages.reduce((acc, page) => {
     return [...acc, ...page.items]
   }, [])
 
@@ -78,10 +78,20 @@ const Dashboard = () => {
                   avatar={post.avatar}
                   verified={post.verified}
                   createdAt={post.createdAt}
+                  role={post.role}
                 />
               </Link>
             ))}
         </InfiniteScroll>
+        {(!posts || posts.length === 0) && (isLoading ? (
+          <div className='w-full flex items-center justify-center p-4'>
+            Loading...
+          </div>
+        ) : (
+          <div className='w-full flex items-center justify-center p-4'>
+            <span>No Posts Found. 💤</span>
+          </div>
+        ))}
       </div>
     </>
   )

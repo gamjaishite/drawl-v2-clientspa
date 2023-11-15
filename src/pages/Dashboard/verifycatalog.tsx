@@ -1,13 +1,12 @@
-import { TableCatalog, } from "@/components/table/Table";
+import {TableCatalog} from '@/components/table/TableCatalog'
 
 const VerifyCatalog = () => {
-    return (
-      <>
-        <main>Berikut adalah tabel untuk mem-verify catalog:</main>
-        <TableCatalog />
-      </>
-    );
-    
-  };
-  
-  export default VerifyCatalog;
+  return (
+    <>
+      <h4 className="mb-4">Catalog Request</h4>
+      <TableCatalog />
+    </>
+  )
+}
+
+export default VerifyCatalog

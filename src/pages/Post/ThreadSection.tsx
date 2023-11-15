@@ -51,7 +51,7 @@ const ThreadSection = (props: { postId: string }) => {
     try {
       const res = await fetch(
         `${import.meta.env.VITE_REST_SERVICE_BASE_URL
-        }/discuss-thread?page=${pageParam}&perPage=${4}&postId=${props.postId}`,
+        }/discuss-thread?page=${pageParam}&perPage=${10}&postId=${props.postId}`,
       )
       const resData = await res.json()
 
@@ -70,7 +70,7 @@ const ThreadSection = (props: { postId: string }) => {
     }
   }
 
-  const { data, fetchNextPage, hasNextPage, refetch } = useInfiniteQuery({
+  const { data, fetchNextPage, hasNextPage, refetch, isLoading } = useInfiniteQuery({
     queryKey: ['threads'],
     queryFn: getThreads,
     initialPageParam: 1,
@@ -81,7 +81,7 @@ const ThreadSection = (props: { postId: string }) => {
     },
   })
 
-  const threads = data?.pages.reduce((acc, page) => {
+  const threads = data && data?.pages.reduce((acc, page) => {
     return [...acc, ...page.items]
   }, [])
 
@@ -175,8 +175,14 @@ const ThreadSection = (props: { postId: string }) => {
               verified={thread.verified}
               userId={thread.userId}
               createdAt={thread.createdAt}
+              role={thread.role}
             />
           ))}
+        {(!threads || threads.length === 0) && isLoading && (
+          <div className='w-full flex items-center justify-center p-4'>
+            Loading...
+          </div>
+        )}
       </InfiniteScroll>
     </div>
   )

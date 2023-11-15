@@ -11,7 +11,8 @@ export interface ProfileData {
   updatedAt: string
   username: string
   verified: boolean
-  isFollowing: boolean
+  followingId?: string | null
+  role: 'ADMIN' | 'BASIC'
 }
 
 export interface PostData {
@@ -26,6 +27,7 @@ export interface PostData {
   username: string
   avatar: string
   verified: boolean
+  role: string
 }
 
 export interface ThreadData {
@@ -34,5 +36,35 @@ export interface ThreadData {
   avatar?: string
   verified: boolean
   userId: string
+  role: string
   createdAt: string
+}
+
+export interface VerificationRequestData {
+  createdAt: string
+  id: string
+  status: string
+  updatedAt: string
+  userId: string
+  uuid: string
+}
+
+export interface ReportUserData {
+  content: string
+  createdAt: string
+  id: string
+  reportedId: string
+  reporterId: string
+  updatedAt: string
+  uuid: string
+}
+
+export interface CatalogRequestData {
+  id: number
+  uuid: string
+  title: string
+  description: string
+  poster?: string | null
+  trailer?: string | null
+  category: 'ANIME' | 'DRAMA'
 }
