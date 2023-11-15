@@ -75,7 +75,7 @@ const ThreadSection = (props: { postId: string }) => {
     queryFn: getThreads,
     initialPageParam: 1,
     getNextPageParam: (lastPage) => {
-      if (lastPage.page < lastPage.totalPage) {
+      if (lastPage.items.length === lastPage.perPage) {
         return lastPage.prevOffset + 1
       }
     },

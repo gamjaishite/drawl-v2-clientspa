@@ -12,18 +12,13 @@ const Dashboard = () => {
   const [isRefetch, setIsRefetch] = useState(false)
 
   const getPosts = async ({ pageParam = 1 }) => {
-    try {
-      const res = await fetch(
-        `${import.meta.env.VITE_REST_SERVICE_BASE_URL
-        }/discuss-post?page=${pageParam}&perPage=${4}`,
-      )
-      const resData = await res.json()
+    const res = await fetch(
+      `${import.meta.env.VITE_REST_SERVICE_BASE_URL
+      }/discuss-post?page=${pageParam}&perPage=${4}`,
+    )
+    const resData = await res.json()
 
-      return { ...resData.data, prevOffset: pageParam }
-    } catch (e) {
-      console.log(e)
-      return { items: [], page: 0, perPage: 0, totalPage: 0, prevOffset: pageParam }
-    }
+    return { ...resData.data, prevOffset: pageParam }
   }
 
   const { data, fetchNextPage, hasNextPage, refetch, isLoading } = useInfiniteQuery({
@@ -31,7 +26,7 @@ const Dashboard = () => {
     queryFn: getPosts,
     initialPageParam: 1,
     getNextPageParam: (lastPage) => {
-      if (lastPage.page < lastPage.totalPage) {
+      if (lastPage.items.length === lastPage.perPage) {
         return lastPage.prevOffset + 1
       }
     },
