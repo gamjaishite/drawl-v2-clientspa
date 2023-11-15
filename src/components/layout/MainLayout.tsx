@@ -58,6 +58,8 @@ const BasicSidebar = () => {
 }
 
 const AdminSidebar = () => {
+  const auth = useAuth()
+
   return (
     <div className="flex md:flex-col justify-around md:justify-normal gap-2">
       <a href={`/admin/dashboard/verifycatalog`} className="text-foreground">
@@ -88,6 +90,16 @@ const AdminSidebar = () => {
         >
           <Flag />
           <span className="hidden md:block">Reports</span>
+        </Button>
+      </a>
+      <a href={`/profile/${auth.user?.id}`} className="text-foreground">
+        <Button
+          variant={'ghost'}
+          size={'lg'}
+          className="justify-start space-x-2 px-4 text-xl w-full"
+        >
+          <User />
+          <span className="hidden md:block">Profile</span>
         </Button>
       </a>
     </div>

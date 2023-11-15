@@ -45,6 +45,7 @@ const Post = () => {
             username={post.username}
             catalogPoster={post.catalogPoster}
             createdAt={post.createdAt}
+            role={post.role}
           />
           <ThreadSection postId={params.id ?? ''} />
         </>

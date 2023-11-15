@@ -10,8 +10,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import {Label} from '@radix-ui/react-label'
-import {Textarea} from '@/components/ui/textarea'
 import {ProfileData} from '@/types'
 import {EditProfileForm} from './EditProfileForm'
 import {useCookies} from 'react-cookie'
@@ -20,6 +18,7 @@ import {useEffect, useState} from 'react'
 import {useAuth} from '@/hooks'
 import {cn} from '@/lib/utils'
 import {useNavigate} from 'react-router-dom'
+import {ReportUserForm} from './ReportUserForm'
 
 interface ProfileHeaderProps {
   profile: ProfileData
@@ -111,6 +110,10 @@ export const ProfileHeader = ({profile, setProfile}: ProfileHeaderProps) => {
   }
 
   const handleUnfollow = async () => {
+    if (!user) {
+      navigate('/auth/login')
+      return
+    }
     try {
       setPostLoading(true)
       const res = await fetch(
@@ -145,6 +148,7 @@ export const ProfileHeader = ({profile, setProfile}: ProfileHeaderProps) => {
       setPostLoading(false)
     }
   }
+
   return (
     <div className="border rounded-md">
       <img
@@ -175,26 +179,31 @@ export const ProfileHeader = ({profile, setProfile}: ProfileHeaderProps) => {
             <>
               {user?.id !== profile.id ? (
                 <>
-                  <Dialog>
-                    <DialogTrigger>
-                      <Flag />
-                    </DialogTrigger>
-                    <DialogContent className="w-[calc(100vw-4rem)] sm:max-w-[425px] rounded-lg">
-                      <DialogHeader>
-                        <DialogTitle className="text-start">
-                          Report {profile.username}?
-                        </DialogTitle>
-                      </DialogHeader>
-                      <p className="text-start subtle">
-                        Our team will review this profile and take appropriate action.
-                      </p>
-                      <Label htmlFor="comment">Comments</Label>
-                      <Textarea id="comment" placeholder="Enter your comment here" />
-                      <DialogFooter>
-                        <Button type="submit">Submit</Button>
-                      </DialogFooter>
-                    </DialogContent>
-                  </Dialog>
+                  {profile.role !== 'ADMIN' &&
+                    (user ? (
+                      <Dialog>
+                        <DialogTrigger>
+                          <Flag />
+                        </DialogTrigger>
+                        <DialogContent className="w-[calc(100vw-4rem)] sm:max-w-[425px] rounded-lg">
+                          <DialogHeader>
+                            <DialogTitle className="text-start">
+                              Report {profile.username}?
+                            </DialogTitle>
+                          </DialogHeader>
+                          <ReportUserForm reportedId={profile.id} />
+                        </DialogContent>
+                      </Dialog>
+                    ) : (
+                      <Button
+                        variant={'ghost'}
+                        onClick={() => {
+                          navigate('/auth/login')
+                        }}
+                      >
+                        <Flag />
+                      </Button>
+                    ))}
                   <Button onClick={profile.followingId ? handleUnfollow : handleFollow}>
                     {profile.followingId ? 'Unfollow' : 'Follow'}
                   </Button>
@@ -212,7 +221,7 @@ export const ProfileHeader = ({profile, setProfile}: ProfileHeaderProps) => {
                       <EditProfileForm profile={profile} setProfile={setProfile} />
                     </DialogContent>
                   </Dialog>
-                  {!profile.verified && (
+                  {!profile.verified && profile.role !== 'ADMIN' && (
                     <Dialog>
                       <DialogTrigger
                         className={cn(
@@ -270,7 +279,9 @@ export const ProfileHeader = ({profile, setProfile}: ProfileHeaderProps) => {
       <div className="min-h-[100px] mx-4 md:mx-10 my-4">
         <div className="flex flex-row gap-2 items-center">
           <p className="large">@{profile.username}</p>
-          {profile.verified && <Verified className="text-indigo-500" />}
+          {(profile.verified || profile.role === 'ADMIN') && (
+            <Verified fill={profile.role === 'ADMIN' ? '#fbbf24' : ''} />
+          )}
         </div>
         <p className="mt-2.5 mb-4 min-h-[50px] w-full break-words">{profile.bio}</p>
         <div className="flex flex-row items-center gap-4">

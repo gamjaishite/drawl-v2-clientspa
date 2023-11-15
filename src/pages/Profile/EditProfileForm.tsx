@@ -140,10 +140,14 @@ export const EditProfileForm = ({
     )
 
     if (result.ok) {
-      const profile = await result.json()
-      console.log(profile.data)
+      const newProfile = await result.json()
+      console.log(newProfile.data)
       setProfile({
-        ...profile.data,
+        ...profile,
+        avatar: newProfile.data.avatar,
+        bio: newProfile.data.bio,
+        cover: newProfile.data.cover,
+        username: newProfile.data.username,
       })
       toast.success('Profile updated')
     } else {
@@ -189,12 +193,12 @@ export const EditProfileForm = ({
                 <FormControl>
                   <div>
                     <button
-                      disabled={!profile.verified}
+                      disabled={!profile.verified && profile.role !== 'ADMIN'}
                       type="button"
                       className="relative w-full"
                       onClick={() => handleClick('cover')}
                     >
-                      {!profile.verified && (
+                      {!profile.verified && profile.role !== 'ADMIN' && (
                         <div className="absolute w-full h-[100px] md:h-[160px] flex justify-center items-center top-0 -z-50 hover:z-50">
                           <h4 className="text-center">
                             UNLOCK
@@ -231,11 +235,11 @@ export const EditProfileForm = ({
                   <div className="flex flex-col justify-between items-start mx-4 -mt-10">
                     <button
                       type="button"
-                      disabled={!profile.verified}
+                      disabled={!profile.verified && profile.role !== 'ADMIN'}
                       className="relative w-[100px] h-[100px]"
                       onClick={() => handleClick('avatar')}
                     >
-                      {!profile.verified && (
+                      {!profile.verified && profile.role !== 'ADMIN' && (
                         <div className="absolute flex justify-center items-center top-0 -z-50 hover:z-50 w-[100px] h-[100px] border-4 border-background -mt-5">
                           <h4 className="text-xs text-center">
                             UNLOCK
@@ -259,7 +263,7 @@ export const EditProfileForm = ({
                       className="hidden"
                       onChange={(e) => handleChange(e, 'avatar')}
                     />
-                    {!profile.verified && (
+                    {!profile.verified && profile.role !== 'ADMIN' && (
                       <p className="text-xs md:text-sm">
                         <Info className="w-4 h-4 subtle inline-block" /> Unlock avatar and
                         banner by becoming verified

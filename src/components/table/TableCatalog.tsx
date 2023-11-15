@@ -1,106 +1,239 @@
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-  } from "@/components/ui/table"
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
 
-  import { ButtonIconCheck, ButtonIconCross } from "../buttons/Icon";
-  import React, { useRef, useState, useEffect } from 'react'
-  import { Check, X } from 'lucide-react';
+import {useState, useEffect} from 'react'
+import {Check, X} from 'lucide-react'
 
-  import { Button } from "@/components/ui/button"
+import {Button} from '@/components/ui/button'
+import {useCookies} from 'react-cookie'
+import {toast} from 'react-toastify'
+import {CatalogRequestData} from '@/types'
+import ReactPaginate from 'react-paginate'
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '../ui/dialog'
 
 export function TableCatalog() {
+  // Fetch REST API
+  const [catalogRequests, setCatalogRequests] = useState<CatalogRequestData[]>([])
+  const [loading, setLoading] = useState(false)
+  const [cookies] = useCookies()
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPage, setTotalPage] = useState(1)
 
-    const catalog_data = [
-      {
-        catalog_id: 1,
-        title: "jujutsu kaisen",
-        description: "Jujutsu Kaisen is a Japanese manga series written and illustrated by Gege Akutami. It has been serialized in Shueisha's shōnen manga magazine Weekly Shōnen Jump since March 2018",
-        catalog_link: "https://en.wikipedia.org/wiki/Jujutsu_Kaisen",
-      },
-      {
-        catalog_id: 2,
-        title: "demon slayer",
-        description: "Demon Slayer: Kimetsu no Yaiba is a Japanese manga series written and illustrated by Koyoharu Gotouge. It was serialized in Shueisha's shōnen manga magazine Weekly Shōnen Jump",
-        catalog_link: "https://en.wikipedia.org/wiki/Demon_Slayer:_Kimetsu_no_Yaiba",
-      },
-    ]
-  
-    // Fetch REST API
-    const [users, setUsers] = useState([])
-  
-    const fetchUserData = () => {
-      fetch("http://localhost:3002/catalog")
-        .then(response => {
-          return response.json()
-        })
-        .then(data => {
-          setUsers(data)
-        })
+  const fetchUserData = async (page?: number) => {
+    try {
+      setLoading(true)
+
+      const res = await fetch(
+        `${import.meta.env.VITE_REST_SERVICE_BASE_URL}/catalog-request?page=${page ?? 1}`,
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.suka_nyabun}`,
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+        },
+      )
+
+      const resData = await res.json()
+      if (!res.ok) {
+        toast.error(resData.message)
+        return
+      }
+      setCatalogRequests(resData.data.data ?? [])
+      setTotalPage(parseInt(resData.data.totalPage) ?? 1)
+    } catch (err) {
+      console.log(err)
+    } finally {
+      setLoading(false)
     }
-  
-    useEffect(() => {
-      fetchUserData()
-    }, [])
-  
-  
-    const [lists, setList] = useState(catalog_data)
-      const [count, setCount] = useState(3)
-      const [updateState, setUpdateState] = useState(-1)
-  
-      function handleAccept(id: any) {
-        setCount(count + 1);
-        const newlist = lists.concat({
-          catalog_id: count,
-          title: "breezy232",
-          description: "x2@gmail.com",
-          catalog_link: "https://lucide.dev/icons/x",
-        })
-        setList(newlist)
+  }
+
+  useEffect(() => {
+    fetchUserData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const handleAccept = async (requestUUID: string) => {
+    try {
+      const res = await fetch(
+        `${
+          import.meta.env.VITE_REST_SERVICE_BASE_URL
+        }/catalog-request/${requestUUID}/accept`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${cookies.suka_nyabun}`,
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+        },
+      )
+
+      const resData = await res.json()
+      if (!res.ok) {
+        toast.error(resData.message)
+        return
       }
-  
-      function handleReject(id: any) {
-        const newlist = lists.filter((li) => li.catalog_id !== id)
-        setList(newlist)
+      toast.success(resData.message)
+      fetchUserData(currentPage)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const handleReject = async (requestUUID: string) => {
+    try {
+      const res = await fetch(
+        `${
+          import.meta.env.VITE_REST_SERVICE_BASE_URL
+        }/catalog-request/${requestUUID}/reject`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${cookies.suka_nyabun}`,
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+        },
+      )
+
+      const resData = await res.json()
+      if (!res.ok) {
+        toast.error(resData.message)
+        return
       }
-  
-    return (
+      toast.success(resData.message)
+      fetchUserData(currentPage)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  if (loading) {
+    return <div>Loading...</div>
+  }
+  return (
+    <div className="min-h-[70vh] flex flex-col justify-between">
       <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[100px]">ID Catalog</TableHead>
-              <TableHead>Title</TableHead>
-              <TableHead>Description</TableHead>
-              <TableHead className="text-right">Accept/Deny</TableHead>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="min-w-[100px]">ID</TableHead>
+            <TableHead className="min-w-[100px]">UUID</TableHead>
+            <TableHead className="min-w-[100px]">Title</TableHead>
+            <TableHead className="min-w-[100px]">Description</TableHead>
+            <TableHead className="min-w-[100px]">Poster</TableHead>
+            <TableHead className="min-w-[100px]">Trailer</TableHead>
+            <TableHead className="min-w-[100px]">Category</TableHead>
+            <TableHead>Accept/Deny</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {catalogRequests.map((request) => (
+            <TableRow key={request.id}>
+              <TableCell className="font-medium">{request.id}</TableCell>
+              <TableCell className="font-medium">{request.uuid}</TableCell>
+              <TableCell className="font-medium">{request.title}</TableCell>
+              <TableCell className="font-medium line-clamp-3 text-ellipsis">
+                {request.description}
+              </TableCell>
+              <TableCell className="font-medium">
+                <a
+                  href={`${process.env.VITE_PHP_SERVICE_POSTER_BASE_URL}/${request.poster}`}
+                >
+                  {request.poster}
+                </a>
+              </TableCell>
+              <TableCell className="font-medium">
+                <a
+                  href={`${process.env.VITE_PHP_SERVICE_TRAILER_BASE_URL}/${request.trailer}`}
+                >
+                  {request.trailer}
+                </a>
+              </TableCell>
+              <TableCell>
+                <div className="w-fit">
+                  <Dialog>
+                    <DialogTrigger>
+                      <Button variant="outline" size="icon">
+                        <Check className="h-4 w-4" />
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="w-[calc(100vw-4rem)] sm:max-w-[425px] rounded-lg">
+                      <DialogHeader>
+                        <DialogTitle className="text-start">
+                          Accept Request {request.title}?
+                        </DialogTitle>
+                      </DialogHeader>
+                      <p className="text-start">
+                        Are you sure you want to accept catalog request with title
+                        {request.title}?
+                      </p>
+                      <DialogFooter>
+                        <Button type="submit" onClick={() => handleAccept(request.uuid)}>
+                          Yes
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                  <Dialog>
+                    <DialogTrigger>
+                      <Button variant="outline" size="icon">
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="w-[calc(100vw-4rem)] sm:max-w-[425px] rounded-lg">
+                      <DialogHeader>
+                        <DialogTitle className="text-start">
+                          Reject {request.title}?
+                        </DialogTitle>
+                      </DialogHeader>
+                      <p className="text-start">
+                        Are you sure you want to reject verification request with title
+                        {request.title}?
+                      </p>
+                      <DialogFooter>
+                        <Button type="submit" onClick={() => handleReject(request.uuid)}>
+                          Yes
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                </div>
+              </TableCell>
             </TableRow>
-          </TableHeader>
-          <TableBody>
-            {lists.map((catalog) => (
-              <TableRow key={catalog.catalog_id}>
-                <TableCell className="font-medium">{catalog.catalog_id}</TableCell>
-                <TableCell>
-                  <a href={catalog.catalog_link} target="_blank" rel="noopener noreferrer">
-                  {catalog.title}
-                  </a>
-                  </TableCell>
-                <TableCell>{catalog.description}</TableCell>
-                <TableCell className="text-right">
-                <div>
-                    <Button variant="outline" size="icon" onClick={() => handleAccept(catalog.catalog_id)}>
-                      <Check className="h-4 w-4" />
-                    </Button>
-                    <Button variant="outline" size="icon" onClick={() => handleReject(catalog.catalog_id)}>
-                      <X className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-    )
-  }  
+          ))}
+        </TableBody>
+      </Table>
+      {totalPage > 0 && (
+        <ReactPaginate
+          breakLabel="..."
+          nextLabel={currentPage === totalPage ? '' : 'next >'}
+          onPageChange={(selectedItem) => {
+            console.log(selectedItem)
+            fetchUserData(selectedItem.selected + 1)
+            setCurrentPage(selectedItem.selected + 1)
+          }}
+          pageRangeDisplayed={5}
+          forcePage={currentPage - 1}
+          pageCount={totalPage}
+          previousLabel={currentPage === 1 ? '' : '< prev'}
+          className="flex justify-center items-center gap-4 mt-4"
+          activeClassName="bg-foreground px-1 rounded-md font-bold"
+        />
+      )}
+    </div>
+  )
+}

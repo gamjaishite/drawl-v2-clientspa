@@ -200,18 +200,23 @@ export function TableReport() {
           ))}
         </TableBody>
       </Table>
-      <ReactPaginate
-        breakLabel="..."
-        nextLabel={currentPage === totalPage ? '' : 'next >'}
-        onPageChange={(selectedItem) => {
-          fetchUserData(selectedItem.selected)
-          setCurrentPage(selectedItem.selected)
-        }}
-        pageRangeDisplayed={5}
-        pageCount={totalPage}
-        previousLabel={currentPage === 1 ? '' : '< prev'}
-        className="flex justify-center items-center gap-4 mt-4"
-      />
+      {totalPage > 0 && (
+        <ReactPaginate
+          breakLabel="..."
+          nextLabel={currentPage === totalPage ? '' : 'next >'}
+          onPageChange={(selectedItem) => {
+            console.log(selectedItem)
+            fetchUserData(selectedItem.selected + 1)
+            setCurrentPage(selectedItem.selected + 1)
+          }}
+          pageRangeDisplayed={5}
+          forcePage={currentPage - 1}
+          pageCount={totalPage}
+          previousLabel={currentPage === 1 ? '' : '< prev'}
+          className="flex justify-center items-center gap-4 mt-4"
+          activeClassName="bg-foreground px-1 rounded-md font-bold"
+        />
+      )}
     </div>
   )
 }

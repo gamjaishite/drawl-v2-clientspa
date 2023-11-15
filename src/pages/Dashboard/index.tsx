@@ -78,6 +78,7 @@ const Dashboard = () => {
                   username={post.username}
                   avatar={post.avatar}
                   verified={post.verified}
+                  role={post.role}
                 />
               </Link>
             ))}

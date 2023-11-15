@@ -164,6 +164,7 @@ const ThreadSection = (props: {postId: string}) => {
               avatar={thread.avatar}
               verified={thread.verified}
               userId={thread.userId}
+              role={thread.role}
             />
           ))}
       </InfiniteScroll>

@@ -41,7 +41,7 @@ export function TableUser() {
       const res = await fetch(
         `${import.meta.env.VITE_REST_SERVICE_BASE_URL}/verification-request?page=${
           page ?? 1
-        }`,
+        }&status=PENDING`,
         {
           headers: {
             Authorization: `Bearer ${cookies.suka_nyabun}`,
@@ -170,7 +170,7 @@ export function TableUser() {
                         </DialogTitle>
                       </DialogHeader>
                       <p className="text-start">
-                        Are you sure you want to acceot verification request of user
+                        Are you sure you want to accept verification request of user
                         {request.userId}?
                       </p>
                       <DialogFooter>
@@ -215,18 +215,23 @@ export function TableUser() {
           ))}
         </TableBody>
       </Table>
-      <ReactPaginate
-        breakLabel="..."
-        nextLabel={currentPage === totalPage ? '' : 'next >'}
-        onPageChange={(selectedItem) => {
-          fetchUserData(selectedItem.selected)
-          setCurrentPage(selectedItem.selected)
-        }}
-        pageRangeDisplayed={5}
-        pageCount={totalPage}
-        previousLabel={currentPage === 1 ? '' : '< prev'}
-        className="flex justify-center items-center gap-4 mt-4"
-      />
+      {totalPage > 0 && (
+        <ReactPaginate
+          breakLabel="..."
+          nextLabel={currentPage === totalPage ? '' : 'next >'}
+          onPageChange={(selectedItem) => {
+            console.log(selectedItem)
+            fetchUserData(selectedItem.selected + 1)
+            setCurrentPage(selectedItem.selected + 1)
+          }}
+          pageRangeDisplayed={5}
+          forcePage={currentPage - 1}
+          pageCount={totalPage}
+          previousLabel={currentPage === 1 ? '' : '< prev'}
+          className="flex justify-center items-center gap-4 mt-4"
+          activeClassName="bg-foreground px-1 rounded-md font-bold"
+        />
+      )}
     </div>
   )
 }

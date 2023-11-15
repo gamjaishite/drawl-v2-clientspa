@@ -13,6 +13,7 @@ export const PostCard = (props: {
   username?: string
   avatar?: string
   createdAt?: string
+  role?: string
 }) => {
   return (
     <div className="border rounded-md p-6 flex flex-row gap-6 w-full">
@@ -33,7 +34,9 @@ export const PostCard = (props: {
           className="flex items-center gap-1 max-w-max"
         >
           <span>{props.username}</span>
-          {props.verified && <Verified size={22} fill="#8b5cf6" color="white" />}
+          {(props.verified || props.role === 'ADMIN') && (
+            <Verified fill={props.role === 'ADMIN' ? '#fbbf24' : ''} />
+          )}
         </Link>
         <div className="border rounded-lg flex flex-row w-full ">
           <img
