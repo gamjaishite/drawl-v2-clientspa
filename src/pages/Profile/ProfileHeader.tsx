@@ -279,9 +279,8 @@ export const ProfileHeader = ({profile, setProfile}: ProfileHeaderProps) => {
       <div className="min-h-[100px] mx-4 md:mx-10 my-4">
         <div className="flex flex-row gap-2 items-center">
           <p className="large">@{profile.username}</p>
-          {(profile.verified || profile.role === 'ADMIN') && (
-            <Verified fill={profile.role === 'ADMIN' ? '#fbbf24' : ''} />
-          )}
+          {profile.role === 'ADMIN' && <Verified fill={'#fbbf24'} />}
+          {profile.role !== 'ADMIN' && profile.verified && <Verified />}
         </div>
         <p className="mt-2.5 mb-4 min-h-[50px] w-full break-words">{profile.bio}</p>
         <div className="flex flex-row items-center gap-4">

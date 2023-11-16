@@ -61,9 +61,8 @@ const LoginForm = () => {
     console.log(result)
     if (!result.success) {
       toast.error(result.message)
-    } else {
-      window.location.href = '/'
     }
+    toast.success(result.message)
   }
 
   return (

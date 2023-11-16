@@ -29,9 +29,8 @@ const ThreadCard = (props: {
           className="flex items-center gap-1 max-w-max"
         >
           <span>{props.username}</span>
-          {(props.verified || props.role === 'ADMIN') && (
-            <Verified fill={props.role === 'ADMIN' ? '#fbbf24' : ''} />
-          )}
+          {props.role === 'ADMIN' && <Verified fill={'#fbbf24'} />}
+          {props.role !== 'ADMIN' && props.verified && <Verified />}
         </Link>
         <p>{props.thread}</p>
       </div>

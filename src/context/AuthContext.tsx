@@ -85,6 +85,7 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
         },
       )
       const responseData = await response.json()
+      console.log(responseData)
 
       if (!response.ok) {
         return {

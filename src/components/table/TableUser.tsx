@@ -170,7 +170,7 @@ export function TableUser() {
                         </DialogTitle>
                       </DialogHeader>
                       <p className="text-start">
-                        Are you sure you want to accept verification request of user
+                        Are you sure you want to accept verification request of user{' '}
                         {request.userId}?
                       </p>
                       <DialogFooter>
@@ -196,7 +196,7 @@ export function TableUser() {
                         </DialogTitle>
                       </DialogHeader>
                       <p className="text-start">
-                        Are you sure you want to reject verification request of user
+                        Are you sure you want to reject verification request of user{' '}
                         {request.userId}?
                       </p>
                       <DialogFooter>

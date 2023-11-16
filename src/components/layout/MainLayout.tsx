@@ -136,7 +136,7 @@ const MainLayout = ({title = '', children}: MainLayoutProps) => {
         <h4 className="px-4 mb-4 hidden md:block">DQ</h4>
         <CurrentSidebar />
       </aside>
-      <div className="w-full px-0 lg:px-24">
+      <div className="w-full overflow-x-auto px-0 lg:px-24">
         <header className="sticky top-0 z-40 py-4 px-5 md:px-10 flex flex-row flex-wrap justify-between items-center gap-4 bg-background/30 backdrop-blur-lg">
           <div className="flex flex-row items-center gap-4">
             {!title.toLowerCase().includes('home') && (
