@@ -179,7 +179,7 @@ const AddPostDialog = (props: {setIsRefetch: (x: boolean) => void}) => {
                     <FormItem className="flex flex-col gap-1">
                       <FormControl>
                         <Textarea
-                          placeholder="This drama is good as f***"
+                          placeholder="This drama is good"
                           className="min-h-[300px] border-none resize-none"
                           {...field}
                           onChange={(e) => {

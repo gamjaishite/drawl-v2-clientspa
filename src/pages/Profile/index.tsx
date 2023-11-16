@@ -80,6 +80,10 @@ const Profile = () => {
     return <ProfileError error={error} />
   }
 
+  if (profile && profile.blocked) {
+    return <ProfileError error="This user is suspended" />
+  }
+
   return (
     <>
       <ProfileHeader profile={profile} setProfile={setProfile} />
