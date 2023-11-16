@@ -55,17 +55,20 @@ export const ReportUserForm = ({reportedId}: {reportedId: string}) => {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values)
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/report-user`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${cookies.suka_nyabun}`,
+      const res = await fetch(
+        `${import.meta.env.VITE_REST_SERVICE_BASE_URL}/report-user`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${cookies.suka_nyabun}`,
+          },
+          body: JSON.stringify({
+            content: values.content,
+            reportedId: values.reportedId,
+          }),
         },
-        body: JSON.stringify({
-          content: values.content,
-          reportedId: values.reportedId,
-        }),
-      })
+      )
 
       const resData = await res.json()
       if (!res.ok) {

@@ -23,9 +23,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '../ui/dialog'
+import {useAuth} from '@/hooks'
 
 export function TableReport() {
   // Fetch REST API
+  const {user} = useAuth()
   const [reports, setReports] = useState<ReportUserData[]>([])
   const [loading, setLoading] = useState(false)
   const [cookies] = useCookies()
@@ -62,9 +64,11 @@ export function TableReport() {
   }
 
   useEffect(() => {
-    fetchUserData()
+    if (user && user.role === 'ADMIN') {
+      fetchUserData()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [user])
 
   const handleAccept = async (reportedId: string) => {
     try {

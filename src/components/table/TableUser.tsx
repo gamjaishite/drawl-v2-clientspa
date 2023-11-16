@@ -23,9 +23,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '../ui/dialog'
+import {useAuth} from '@/hooks'
 
 export function TableUser() {
   // Fetch REST API
+  const {user} = useAuth()
   const [verificationRequests, setVerificationRequests] = useState<
     VerificationRequestData[]
   >([])
@@ -66,9 +68,11 @@ export function TableUser() {
   }
 
   useEffect(() => {
-    fetchUserData()
+    if (user && user.role === 'ADMIN') {
+      fetchUserData()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [user])
 
   const handleAccept = async (userId: string) => {
     try {

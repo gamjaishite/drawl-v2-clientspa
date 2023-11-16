@@ -23,9 +23,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '../ui/dialog'
+import {useAuth} from '@/hooks'
 
 export function TableCatalog() {
   // Fetch REST API
+  const {user} = useAuth()
   const [catalogRequests, setCatalogRequests] = useState<CatalogRequestData[]>([])
   const [loading, setLoading] = useState(false)
   const [cookies] = useCookies()
@@ -62,8 +64,11 @@ export function TableCatalog() {
   }
 
   useEffect(() => {
-    fetchUserData()
-  }, [])
+    if (user && user.role === 'ADMIN') {
+      fetchUserData()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user])
 
   const handleAccept = async (uuid: string) => {
     try {

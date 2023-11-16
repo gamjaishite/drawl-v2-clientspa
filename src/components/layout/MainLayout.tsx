@@ -132,11 +132,13 @@ const MainLayout = ({title = '', children}: MainLayoutProps) => {
 
   return (
     <div className="relative flex flex-col-reverse md:flex-row">
-      <aside className="bg-background/30 backdrop-blur-xl md:h-screen fixed md:sticky bottom-0 md:top-0 z-30 w-full md:w-[300px] border-r pl-5 md:pl-16 pr-5 md:pr-10 py-2 md:py-8 flex-col justify-between ">
-        <h4 className="px-4 mb-4 hidden md:block">DQ</h4>
+      <aside className="bg-background/30 backdrop-blur-xl md:h-screen fixed md:sticky bottom-0 md:top-0 z-30 w-full md:w-[300px] border-r pl-5 md:pl-16 pr-5 md:pr-4 py-2 md:py-8 flex-col justify-between ">
+        <a href="/">
+          <h4 className="px-4 mb-4 hidden md:block">DQ</h4>
+        </a>
         <CurrentSidebar />
       </aside>
-      <div className="w-full overflow-x-auto px-0 lg:px-24">
+      <div className="w-full overflow-x-clip px-0 xl:px-24">
         <header className="sticky top-0 z-40 py-4 px-5 md:px-10 flex flex-row flex-wrap justify-between items-center gap-4 bg-background/30 backdrop-blur-lg">
           <div className="flex flex-row items-center gap-4">
             {!title.toLowerCase().includes('home') && (

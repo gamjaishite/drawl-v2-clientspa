@@ -61,8 +61,9 @@ const LoginForm = () => {
     console.log(result)
     if (!result.success) {
       toast.error(result.message)
+    } else {
+      toast.success(result.message)
     }
-    toast.success(result.message)
   }
 
   return (
