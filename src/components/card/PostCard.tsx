@@ -1,7 +1,7 @@
-import {Avatar} from '@/components/ui/avatar'
-import {AvatarFallback, AvatarImage} from '@radix-ui/react-avatar'
-import {Verified} from 'lucide-react'
-import {Link} from 'react-router-dom'
+import { Avatar } from '@/components/ui/avatar'
+import { AvatarFallback, AvatarImage } from '@radix-ui/react-avatar'
+import { Verified } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 export const PostCard = (props: {
   userId?: string
@@ -37,11 +37,17 @@ export const PostCard = (props: {
           {props.role === 'ADMIN' && <Verified fill={'#fbbf24'} />}
           {props.role !== 'ADMIN' && props.verified && <Verified />}
         </Link>
+        <span className='small text-zinc-400'>{props.createdAt && new Date(props.createdAt).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric'
+        })}</span>
         <div className="border rounded-lg flex flex-row w-full ">
           <img
-            src={`${import.meta.env.VITE_PHP_SERVICE_POSTER_BASE_URL}/${
-              props.catalogPoster
-            }`}
+            src={`${import.meta.env.VITE_PHP_SERVICE_POSTER_BASE_URL}/${props.catalogPoster
+              }`}
             alt=""
             className="w-[80px] h-[100px] rounded-md object-cover"
           />

@@ -1,44 +1,38 @@
-import {PostCard} from '@/components/card/PostCard'
+import { PostCard } from '@/components/card/PostCard'
 import AddPostDialog from '@/pages/Dashboard/AddPostDialog.tsx'
-import {useCookies} from 'react-cookie'
-import {useInfiniteQuery} from '@tanstack/react-query'
+import { useCookies } from 'react-cookie'
+import { useInfiniteQuery } from '@tanstack/react-query'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import {Link} from 'react-router-dom'
-import {useEffect, useState} from 'react'
-import {PostData} from '@/types'
+import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { PostData } from '@/types'
 
 const Dashboard = () => {
   const [cookies] = useCookies()
   const [isRefetch, setIsRefetch] = useState(false)
 
-  const getPosts = async ({pageParam = 1}) => {
-    try {
-      const res = await fetch(
-        `${
-          import.meta.env.VITE_REST_SERVICE_BASE_URL
-        }/discuss-post?page=${pageParam}&perPage=${4}`,
-      )
-      const resData = await res.json()
+  const getPosts = async ({ pageParam = 1 }) => {
+    const res = await fetch(
+      `${import.meta.env.VITE_REST_SERVICE_BASE_URL
+      }/discuss-post?page=${pageParam}&perPage=${4}`,
+    )
+    const resData = await res.json()
 
-      return {...resData.data, prevOffset: pageParam}
-    } catch (e) {
-      console.log(e)
-      return {items: [], page: 0, perPage: 0, totalPage: 0, prevOffset: pageParam}
-    }
+    return { ...resData.data, prevOffset: pageParam }
   }
 
-  const {data, fetchNextPage, hasNextPage, refetch} = useInfiniteQuery({
+  const { data, fetchNextPage, hasNextPage, refetch, isLoading } = useInfiniteQuery({
     queryKey: ['posts'],
     queryFn: getPosts,
     initialPageParam: 1,
     getNextPageParam: (lastPage) => {
-      if (lastPage.page < lastPage.totalPage) {
+      if (lastPage.items.length === lastPage.perPage) {
         return lastPage.prevOffset + 1
       }
     },
   })
 
-  const posts = data?.pages.reduce((acc, page) => {
+  const posts = data && data?.pages.reduce((acc, page) => {
     return [...acc, ...page.items]
   }, [])
 
@@ -78,11 +72,21 @@ const Dashboard = () => {
                   username={post.username}
                   avatar={post.avatar}
                   verified={post.verified}
+                  createdAt={post.createdAt}
                   role={post.role}
                 />
               </Link>
             ))}
         </InfiniteScroll>
+        {(!posts || posts.length === 0) && (isLoading ? (
+          <div className='w-full flex items-center justify-center p-4'>
+            Loading...
+          </div>
+        ) : (
+          <div className='w-full flex items-center justify-center p-4'>
+            <span>No Posts Found. 💤</span>
+          </div>
+        ))}
       </div>
     </>
   )

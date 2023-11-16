@@ -1,5 +1,5 @@
-import React, {createContext, useEffect, useState} from 'react'
-import {useCookies} from 'react-cookie'
+import React, { createContext, useEffect, useState } from 'react'
+import { useCookies } from 'react-cookie'
 
 interface UserInfo {
   id: string
@@ -14,8 +14,8 @@ interface LoginCredentials {
 }
 
 export interface IUseAuth {
-  login: (data: LoginCredentials) => Promise<{success: boolean; message: string}>
-  logout: () => {success: boolean; message: string}
+  login: (data: LoginCredentials) => Promise<{ success: boolean; message: string }>
+  logout: () => { success: boolean; message: string }
   setUser: (user: UserInfo) => void
   user?: UserInfo
   isLoggedIn: boolean
@@ -28,7 +28,7 @@ interface AuthProviderProps {
 
 export const AuthContext = createContext<IUseAuth | undefined>(undefined)
 
-export const AuthProvider = ({children}: AuthProviderProps) => {
+export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<UserInfo | undefined>()
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [cookies, setCookie, deleteCookie] = useCookies(['suka_nyabun'])
@@ -48,11 +48,11 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
           },
         )
         const responseData = await response.json()
-        console.log(responseData)
         if (!response.ok) {
           deleteCookie('suka_nyabun')
           setIsLoggedIn(false)
           setUser(undefined)
+          return
         }
 
         setIsLoggedIn(true)
@@ -94,7 +94,7 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
         }
       }
 
-      setCookie('suka_nyabun', responseData.data.accessToken, {path: '/'})
+      setCookie('suka_nyabun', responseData.data.accessToken, { path: '/' })
       setIsLoggedIn(true)
       setUser({
         id: responseData.data.id,

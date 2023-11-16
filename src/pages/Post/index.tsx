@@ -1,8 +1,9 @@
-import {PostCard} from '@/components/card/PostCard.tsx'
-import {useParams} from 'react-router-dom'
-import {useCookies} from 'react-cookie'
-import {useQuery} from '@tanstack/react-query'
+import { PostCard } from '@/components/card/PostCard.tsx'
+import { useParams } from 'react-router-dom'
+import { useCookies } from 'react-cookie'
+import { useQuery } from '@tanstack/react-query'
 import ThreadSection from '@/pages/Post/ThreadSection.tsx'
+import { FourOhFour } from '../Error'
 
 const Post = () => {
   const params = useParams()
@@ -21,10 +22,10 @@ const Post = () => {
     if (!res.ok) {
       throw new Error(resData.message)
     }
-    return {...resData}
+    return { ...resData }
   }
 
-  const {data} = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['post'],
     queryFn: getPost,
   })
@@ -33,7 +34,7 @@ const Post = () => {
 
   return (
     <div>
-      {post && (
+      {post ? (
         <>
           <PostCard
             userId={post.userId}
@@ -49,6 +50,14 @@ const Post = () => {
           />
           <ThreadSection postId={params.id ?? ''} />
         </>
+      ) : isLoading ? (
+        <div className='w-full flex items-center justify-center p-4'>
+          Loading...
+        </div>
+      ) : (
+        <div className='w-full flex items-center justify-center p-4'>
+          <FourOhFour />
+        </div>
       )}
     </div>
   )
