@@ -1,5 +1,5 @@
 import { PostCard } from '@/components/card/PostCard.tsx'
-import { useParams } from 'react-router-dom'
+import { redirect, useParams } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
 import { useQuery } from '@tanstack/react-query'
 import ThreadSection from '@/pages/Post/ThreadSection.tsx'
@@ -25,7 +25,7 @@ const Post = () => {
     return { ...resData }
   }
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ['post'],
     queryFn: getPost,
   })
@@ -38,6 +38,7 @@ const Post = () => {
         <>
           <PostCard
             userId={post.userId}
+            postId={params.id!}
             postContent={post.content}
             catalogTitle={post.catalogTitle}
             catalogDescription={post.catalogDescription}
@@ -47,6 +48,8 @@ const Post = () => {
             catalogPoster={post.catalogPoster}
             createdAt={post.createdAt}
             role={post.role}
+            refetch={refetch}
+            redirect='/'
           />
           <ThreadSection postId={params.id ?? ''} />
         </>

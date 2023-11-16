@@ -31,6 +31,7 @@ export interface PostData {
 }
 
 export interface ThreadData {
+  uuid: string
   content: string
   username: string
   avatar?: string

@@ -63,7 +63,7 @@ const Profile = () => {
 
     return { ...resData.data, prevOffset: pageParam }
   }
-  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery({
+  const { data, fetchNextPage, hasNextPage, refetch } = useInfiniteQuery({
     queryKey: ['profilePosts'],
     queryFn: getPosts,
     initialPageParam: 1,
@@ -91,7 +91,7 @@ const Profile = () => {
         <InfiniteScroll next={() => fetchNextPage()} hasMore={hasNextPage} loader={<div>Loading...</div>} dataLength={posts ? posts.length : 0} className='flex flex-col gap-6'>
           {posts && posts.map((post: PostData, index: number) => (
             <Link key={index} to={`/post/${post.uuid}`} className='font-normal w-full'>
-              <PostCard avatar={post.avatar} catalogDescription={post.catalogDescription} catalogPoster={post.catalogPoster} catalogTitle={post.catalogTitle} createdAt={post.createdAt} postContent={post.content} userId={post.userId} username={post.username} verified={post.verified} role={post.role} />
+              <PostCard avatar={post.avatar} refetch={refetch} postId={post.uuid} catalogDescription={post.catalogDescription} catalogPoster={post.catalogPoster} catalogTitle={post.catalogTitle} createdAt={post.createdAt} postContent={post.content} userId={post.userId} username={post.username} verified={post.verified} role={post.role} />
             </Link>
           ))}
         </InfiniteScroll>

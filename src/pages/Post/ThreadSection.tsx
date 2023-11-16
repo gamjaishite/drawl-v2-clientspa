@@ -169,6 +169,7 @@ const ThreadSection = (props: { postId: string }) => {
           threads.map((thread: ThreadData, index: number) => (
             <ThreadCard
               key={index}
+              threadId={thread.uuid}
               thread={thread.content}
               username={thread.username}
               avatar={thread.avatar}
@@ -176,6 +177,7 @@ const ThreadSection = (props: { postId: string }) => {
               userId={thread.userId}
               createdAt={thread.createdAt}
               role={thread.role}
+              refetch={refetch}
             />
           ))}
         {(!threads || threads.length === 0) && isLoading && (

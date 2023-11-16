@@ -65,6 +65,7 @@ const Dashboard = () => {
                 <PostCard
                   key={index}
                   userId={post.userId}
+                  postId={post.uuid}
                   postContent={post.content}
                   catalogTitle={post.catalogTitle}
                   catalogPoster={post.catalogPoster}
@@ -74,6 +75,7 @@ const Dashboard = () => {
                   verified={post.verified}
                   createdAt={post.createdAt}
                   role={post.role}
+                  refetch={refetch}
                 />
               </Link>
             ))}
