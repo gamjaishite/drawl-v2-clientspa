@@ -14,7 +14,7 @@ import {ProfileData} from '@/types'
 import {EditProfileForm} from './EditProfileForm'
 import {useCookies} from 'react-cookie'
 import {toast} from 'react-toastify'
-import {useEffect, useState} from 'react'
+import {useState} from 'react'
 import {useAuth} from '@/hooks'
 import {cn} from '@/lib/utils'
 import {useNavigate} from 'react-router-dom'
@@ -31,10 +31,6 @@ export const ProfileHeader = ({profile, setProfile}: ProfileHeaderProps) => {
   const [cookies] = useCookies(['suka_nyabun'])
   const [postLoading, setPostLoading] = useState(false)
   const navigate = useNavigate()
-
-  useEffect(() => {
-    console.log(profile)
-  }, [profile])
 
   const handleVerificationRequest = async () => {
     console.log('Verification request')

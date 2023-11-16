@@ -148,7 +148,8 @@ export function TableReport() {
               <TableCell>
                 <div>
                   <Dialog>
-                    <DialogTrigger>
+                    <DialogTrigger asChild>
+                      {' '}
                       <Button variant="outline" size="icon">
                         <Check className="h-4 w-4" />
                       </Button>
@@ -173,7 +174,8 @@ export function TableReport() {
                     </DialogContent>
                   </Dialog>
                   <Dialog>
-                    <DialogTrigger>
+                    <DialogTrigger asChild>
+                      {' '}
                       <Button variant="outline" size="icon">
                         <X className="h-4 w-4" />
                       </Button>

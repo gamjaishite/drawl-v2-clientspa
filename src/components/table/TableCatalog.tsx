@@ -63,7 +63,6 @@ export function TableCatalog() {
 
   useEffect(() => {
     fetchUserData()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleAccept = async (uuid: string) => {
@@ -173,7 +172,7 @@ export function TableCatalog() {
               <TableCell>
                 <div className="w-fit">
                   <Dialog>
-                    <DialogTrigger>
+                    <DialogTrigger asChild>
                       <Button variant="outline" size="icon">
                         <Check className="h-4 w-4" />
                       </Button>
@@ -196,7 +195,7 @@ export function TableCatalog() {
                     </DialogContent>
                   </Dialog>
                   <Dialog>
-                    <DialogTrigger>
+                    <DialogTrigger asChild>
                       <Button variant="outline" size="icon">
                         <X className="h-4 w-4" />
                       </Button>
