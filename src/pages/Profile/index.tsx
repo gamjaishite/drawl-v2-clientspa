@@ -21,7 +21,6 @@ const Profile = () => {
     id = user?.id
   }
 
-  console.log(id)
   async function getProfile(id: string, token: string) {
     const result = await fetch(
       `${import.meta.env.VITE_REST_SERVICE_BASE_URL}/profile/${id}`,
@@ -49,12 +48,11 @@ const Profile = () => {
     getProfile(id ?? '', cookies.suka_nyabun ?? '')
   }, [id, cookies.suka_nyabun])
 
-  useEffect(() => {
-    console.log(profile)
-  }, [profile])
-
   const getPosts = async ({ pageParam = 1 }) => {
-    const res = await fetch(`${import.meta.env.VITE_REST_SERVICE_BASE_URL}/profile/${id}/post?page=${pageParam}&perPage=${10}`)
+    const res = await fetch(
+      `${import.meta.env.VITE_REST_SERVICE_BASE_URL
+      }/profile/${id}/post?page=${pageParam}&perPage=${10}`,
+    )
     const resData = await res.json()
 
     if (!res.ok) {
@@ -71,13 +69,12 @@ const Profile = () => {
       if (lastPage.items.length === lastPage.perPage) {
         return lastPage.prevOffset + 1
       }
-    }
+    },
   })
 
   const posts = data?.pages.reduce((acc, page) => {
     return [...acc, ...page.items]
   }, [])
-
 
   if (!profile) {
     return <ProfileError error={error} />
@@ -96,7 +93,7 @@ const Profile = () => {
           ))}
         </InfiniteScroll>
         {(!posts || posts.length === 0) && (
-          <div className='w-full flex items-center justify-center p-4'>
+          <div className="w-full flex items-center justify-center p-4">
             <span>No Posts Found. 💤</span>
           </div>
         )}

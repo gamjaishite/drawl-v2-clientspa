@@ -1,5 +1,5 @@
 import { PostCard } from '@/components/card/PostCard.tsx'
-import { redirect, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
 import { useQuery } from '@tanstack/react-query'
 import ThreadSection from '@/pages/Post/ThreadSection.tsx'

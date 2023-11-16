@@ -2,8 +2,8 @@ import { Avatar } from '@/components/ui/avatar'
 import { useAuth } from '@/hooks'
 import { AvatarFallback, AvatarImage } from '@radix-ui/react-avatar'
 import { MoreHorizontal, Trash, Verified } from 'lucide-react'
-import { Link, redirect, useParams } from 'react-router-dom'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui/dropdown-menu'
+import { Link } from 'react-router-dom'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu'
 import { Button } from '../ui/button'
 import { useCookies } from 'react-cookie'
 import { useMutation } from '@tanstack/react-query'
@@ -71,9 +71,8 @@ export const PostCard = (props: {
             className="flex items-center gap-1 max-w-max"
           >
             <span>{props.username}</span>
-            {(props.verified || props.role === 'ADMIN') && (
-              <Verified fill={props.role === 'ADMIN' ? '#fbbf24' : ''} />
-            )}
+            {props.role === 'ADMIN' && <Verified fill={'#fbbf24'} />}
+            {props.role !== 'ADMIN' && props.verified && <Verified />}
           </Link>
           <span className='small text-zinc-400'>{props.createdAt && new Date(props.createdAt).toLocaleDateString('en-US', {
             year: 'numeric',

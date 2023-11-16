@@ -23,9 +23,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '../ui/dialog'
+import {useAuth} from '@/hooks'
 
 export function TableCatalog() {
   // Fetch REST API
+  const {user} = useAuth()
   const [catalogRequests, setCatalogRequests] = useState<CatalogRequestData[]>([])
   const [loading, setLoading] = useState(false)
   const [cookies] = useCookies()
@@ -62,23 +64,26 @@ export function TableCatalog() {
   }
 
   useEffect(() => {
-    fetchUserData()
+    if (user && user.role === 'ADMIN') {
+      fetchUserData()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [user])
 
-  const handleAccept = async (requestUUID: string) => {
+  const handleAccept = async (uuid: string) => {
     try {
       const res = await fetch(
-        `${
-          import.meta.env.VITE_REST_SERVICE_BASE_URL
-        }/catalog-request/${requestUUID}/accept`,
+        `${import.meta.env.VITE_REST_SERVICE_BASE_URL}/catalog-request/${uuid}/status`,
         {
-          method: 'POST',
+          method: 'PATCH',
           headers: {
             Authorization: `Bearer ${cookies.suka_nyabun}`,
             'Content-Type': 'application/json',
           },
           credentials: 'include',
+          body: JSON.stringify({
+            status: 'ACCEPTED',
+          }),
         },
       )
 
@@ -94,19 +99,20 @@ export function TableCatalog() {
     }
   }
 
-  const handleReject = async (requestUUID: string) => {
+  const handleReject = async (uuid: string) => {
     try {
       const res = await fetch(
-        `${
-          import.meta.env.VITE_REST_SERVICE_BASE_URL
-        }/catalog-request/${requestUUID}/reject`,
+        `${import.meta.env.VITE_REST_SERVICE_BASE_URL}/catalog-request/${uuid}/status`,
         {
-          method: 'POST',
+          method: 'PATCH',
           headers: {
             Authorization: `Bearer ${cookies.suka_nyabun}`,
             'Content-Type': 'application/json',
           },
           credentials: 'include',
+          body: JSON.stringify({
+            status: 'REJECTED',
+          }),
         },
       )
 
@@ -151,22 +157,27 @@ export function TableCatalog() {
               </TableCell>
               <TableCell className="font-medium">
                 <a
-                  href={`${process.env.VITE_PHP_SERVICE_POSTER_BASE_URL}/${request.poster}`}
+                  href={`${import.meta.env.VITE_PHP_SERVICE_POSTER_BASE_URL}/${
+                    request.poster
+                  }`}
                 >
                   {request.poster}
                 </a>
               </TableCell>
               <TableCell className="font-medium">
                 <a
-                  href={`${process.env.VITE_PHP_SERVICE_TRAILER_BASE_URL}/${request.trailer}`}
+                  href={`${import.meta.env.VITE_PHP_SERVICE_TRAILER_BASE_URL}/${
+                    request.trailer
+                  }`}
                 >
                   {request.trailer}
                 </a>
               </TableCell>
+              <TableCell className="font-medium">{request.category}</TableCell>
               <TableCell>
                 <div className="w-fit">
                   <Dialog>
-                    <DialogTrigger>
+                    <DialogTrigger asChild>
                       <Button variant="outline" size="icon">
                         <Check className="h-4 w-4" />
                       </Button>
@@ -178,7 +189,7 @@ export function TableCatalog() {
                         </DialogTitle>
                       </DialogHeader>
                       <p className="text-start">
-                        Are you sure you want to accept catalog request with title
+                        Are you sure you want to accept catalog request with title{' '}
                         {request.title}?
                       </p>
                       <DialogFooter>
@@ -189,7 +200,7 @@ export function TableCatalog() {
                     </DialogContent>
                   </Dialog>
                   <Dialog>
-                    <DialogTrigger>
+                    <DialogTrigger asChild>
                       <Button variant="outline" size="icon">
                         <X className="h-4 w-4" />
                       </Button>
@@ -201,7 +212,7 @@ export function TableCatalog() {
                         </DialogTitle>
                       </DialogHeader>
                       <p className="text-start">
-                        Are you sure you want to reject verification request with title
+                        Are you sure you want to reject verification request with title{' '}
                         {request.title}?
                       </p>
                       <DialogFooter>

@@ -62,7 +62,7 @@ const LoginForm = () => {
     if (!result.success) {
       toast.error(result.message)
     } else {
-      window.location.href = '/'
+      toast.success(result.message)
     }
   }
 

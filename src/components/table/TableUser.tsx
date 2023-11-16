@@ -23,9 +23,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '../ui/dialog'
+import {useAuth} from '@/hooks'
 
 export function TableUser() {
   // Fetch REST API
+  const {user} = useAuth()
   const [verificationRequests, setVerificationRequests] = useState<
     VerificationRequestData[]
   >([])
@@ -66,9 +68,11 @@ export function TableUser() {
   }
 
   useEffect(() => {
-    fetchUserData()
+    if (user && user.role === 'ADMIN') {
+      fetchUserData()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [user])
 
   const handleAccept = async (userId: string) => {
     try {
@@ -158,7 +162,7 @@ export function TableUser() {
               <TableCell>
                 <div className="w-fit">
                   <Dialog>
-                    <DialogTrigger>
+                    <DialogTrigger asChild>
                       <Button variant="outline" size="icon">
                         <Check className="h-4 w-4" />
                       </Button>
@@ -170,7 +174,7 @@ export function TableUser() {
                         </DialogTitle>
                       </DialogHeader>
                       <p className="text-start">
-                        Are you sure you want to accept verification request of user
+                        Are you sure you want to accept verification request of user{' '}
                         {request.userId}?
                       </p>
                       <DialogFooter>
@@ -184,7 +188,7 @@ export function TableUser() {
                     </DialogContent>
                   </Dialog>
                   <Dialog>
-                    <DialogTrigger>
+                    <DialogTrigger asChild>
                       <Button variant="outline" size="icon">
                         <X className="h-4 w-4" />
                       </Button>
@@ -196,7 +200,7 @@ export function TableUser() {
                         </DialogTitle>
                       </DialogHeader>
                       <p className="text-start">
-                        Are you sure you want to reject verification request of user
+                        Are you sure you want to reject verification request of user{' '}
                         {request.userId}?
                       </p>
                       <DialogFooter>

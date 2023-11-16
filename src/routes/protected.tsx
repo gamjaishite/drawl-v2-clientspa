@@ -13,19 +13,21 @@ export const ProtectedRoute = ({roles}: ProtectedRouteProps) => {
   console.log(roles, auth.user?.role)
 
   const protect = () => {
-    if (!auth.loading && roles.length > 0) {
-      if (!auth.isLoggedIn || !auth.user) {
-        navigate('/auth/login')
-        return
-      }
+    if (!auth.loading) {
+      if (roles.length > 0) {
+        if (!auth.isLoggedIn || !auth.user) {
+          navigate('/404')
+          return
+        }
 
-      if (!roles.includes(auth.user.role)) {
+        if (!roles.includes(auth.user.role)) {
+          navigate('/')
+          return
+        }
+      } else if (auth.isLoggedIn && auth.user) {
         navigate('/')
         return
       }
-    } else if (auth.isLoggedIn && auth.user) {
-      navigate('/')
-      return
     }
   }
 
