@@ -247,10 +247,6 @@ export const ProfileHeader = ({profile, setProfile}: ProfileHeaderProps) => {
                               Customize Your Profile: Stand out by adding a custom profile
                               picture and header.
                             </li>
-                            <li>
-                              Access Catalog Requests: Explore exclusive features and
-                              opportunities. 🚀
-                            </li>
                           </ol>
                           Click below to request verification!
                         </div>

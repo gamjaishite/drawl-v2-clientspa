@@ -21,7 +21,7 @@ export const ProtectedRoute = ({roles}: ProtectedRouteProps) => {
         }
 
         if (!roles.includes(auth.user.role)) {
-          navigate('/')
+          navigate('/404')
           return
         }
       } else if (auth.isLoggedIn && auth.user) {

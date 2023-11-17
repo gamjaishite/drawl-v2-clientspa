@@ -298,7 +298,7 @@ export const EditProfileForm = ({
                 <FormItem className="mt-2">
                   <FormLabel>Bio</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Enter your comment here" {...field} />
+                    <Textarea maxLength={255} placeholder="Enter your comment here" {...field} />
                   </FormControl>
 
                   <FormMessage />

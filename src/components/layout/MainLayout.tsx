@@ -1,9 +1,10 @@
 import {useAuth} from '@/hooks'
-import {ArrowLeft, Flag, Home, Moon, Sun, Tv, User, Verified} from 'lucide-react'
+import {ArrowLeft, ExternalLink, Flag, Home, Moon, Sun, Tv, User, Verified} from 'lucide-react'
 import {Button} from '../ui/button'
 import {Switch} from '../ui/switch'
 import {useTheme} from '@/components/theme-provider'
 import {toast} from 'react-toastify'
+import { Skeleton } from '../ui/skeleton'
 
 type MainLayoutProps = {
   title?: string
@@ -43,6 +44,7 @@ const BasicSidebar = () => {
           <span className="hidden md:block">Home</span>
         </Button>
       </a>
+      {!auth.loading ? 
       <a href={`/profile/${auth.user?.id}`} className="text-foreground">
         <Button
           variant={'ghost'}
@@ -52,7 +54,9 @@ const BasicSidebar = () => {
           <User />
           <span className="hidden md:block">Profile</span>
         </Button>
-      </a>
+      </a> : 
+      <Skeleton className='h-10 w-full' />
+      }
     </div>
   )
 }
@@ -107,7 +111,33 @@ const AdminSidebar = () => {
 }
 
 const GuestSidebar = () => {
-  return <div className="flex flex-col gap-4"></div>
+  return (
+    <div className="flex md:flex-col justify-around md:justify-normal gap-2">
+      <a href="/" className="text-foreground">
+        <Button
+          variant={'ghost'}
+          size={'lg'}
+          className="justify-start space-x-2 px-4 text-xl w-full"
+        >
+          <Home />
+          <span className="hidden md:block">Home</span>
+        </Button>
+      </a>
+      <a 
+      target='_blank'
+      rel='noreferrer'
+      href={`${import.meta.env.VITE_PHP_SERVICE_BASE_URL}`} className="text-foreground">
+        <Button
+        variant={"link"}
+          size={'lg'}
+          className="justify-start space-x-2 px-4 text-xl w-full underline"
+        >
+         Drawl
+          <ExternalLink className='ml-4' />
+        </Button>
+      </a>
+    </div>
+  )
 }
 
 const Sidebar: Record<string, () => JSX.Element> = {

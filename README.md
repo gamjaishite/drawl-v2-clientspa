@@ -1,31 +1,36 @@
-# React + TypeScript + Vite
+# DrawlQ (DQ)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Deskripsi
+DrawlQ (DQ) adalah aplikasi React yang merupakan perluasan dari aplikasi Drawl PHP yang bernama DrawlQ. Aplikasi ini memungkinkan pengguna untuk membuat postingan tentang katalog dari aplikasi sebelumnya, serta memberikan kemampuan bagi pengguna untuk memberikan balasan (reply) terhadap postingan tersebut.
 
-Currently, two official plugins are available:
+## Fitur Utama
+1. **Buat Postingan Katalog:** Pengguna dapat membuat postingan yang berisi informasi tentang katalog dari aplikasi sebelumnya.
+2. **Balasan (Reply) Postingan:** Pengguna dapat memberikan balasan terhadap postingan katalog yang telah dibuat.
+3. **Verifikasi Drawl Purple:** Terdapat kemungkinan bagi pengguna untuk melakukan verifikasi Drawl Purple yang memberikan beberapa keuntungan seperti karakter yang lebih banyak, kustomisasi header, dan avatar.
+4. **Mengikuti Pengguna Lain:** Pengguna dapat mengikuti pengguna lain, yang akan membuat postingan mereka menjadi prioritas saat dilihat di beranda.
+5. **Pelaporan Pengguna:** Pengguna memiliki opsi untuk melaporkan pengguna lain. Laporan ini akan diverifikasi terlebih dahulu oleh admin sebelum tindakan selanjutnya diambil.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Fitur Admin
+1. **Verifikasi Drawl Purple:** Admin dapat melihat, menerima, atau menolak permintaan verifikasi Drawl Purple dari pengguna.
+2. **Permintaan Katalog:** Admin dapat melihat permintaan katalog dari pengguna.
+3. **Manajemen Laporan Pengguna:** Admin dapat melihat laporan pengguna yang dilaporkan oleh pengguna lain, dan mengambil tindakan yang diperlukan seperti verifikasi atau penolakan.
 
-## Expanding the ESLint configuration
+## Tangkapan Layar
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### Halaman Login
 
-- Configure the top-level `parserOptions` property like this:
+![Log In](/assets/login_page.png)
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
+### Halaman Home (Dashboard)
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+### Halaman Profile 
 
-## Folder Structure
+### Halaman Profile - Edit Profile
 
-The folder structure follows [Web Dev Simplified React Intermediate Folder Structure](https://blog.webdevsimplified.com/2022-07/react-folder-structure/) except for `utils` folder that became `lib` to match shadcn's practice
+### Halaman Post's Detail
+
+### Halaman Admin Verification Request
+
+### Halaman Admin Catalog Request
+
+### Halaman Admin Report Request
